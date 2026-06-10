@@ -74,8 +74,8 @@
     },
     {
       "nation": "Jordan",
-      "first_name": "Husam Abu",
-      "last_name": "Dahab",
+      "first_name": "Husam",
+      "last_name": "Abu Dahab",
       "jersey_number": 4,
       "birthdate": "13.05.2000",
       "club": "Al-Faisaly SC",
@@ -129,8 +129,8 @@
     },
     {
       "nation": "Jordan",
-      "first_name": "Mohammad Abu",
-      "last_name": "Ghoush",
+      "first_name": "Mohammad",
+      "last_name": "Abu Ghoush",
       "jersey_number": 18,
       "birthdate": "13.07.2005",
       "club": "Al-Hussein SC (Irbid)",

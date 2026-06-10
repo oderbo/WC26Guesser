@@ -30,8 +30,8 @@
     },
     {
       "nation": "Tunisia",
-      "first_name": "Sabri Ben",
-      "last_name": "Hessen",
+      "first_name": "Sabri",
+      "last_name": "Ben Hessen",
       "jersey_number": 22,
       "birthdate": "13.06.1996",
       "club": "Etoile Sportive du Sahel",
@@ -107,8 +107,8 @@
     },
     {
       "nation": "Tunisia",
-      "first_name": "Mohamed Amine Ben",
-      "last_name": "Hamida",
+      "first_name": "Mohamed Amine",
+      "last_name": "Ben Hamida",
       "jersey_number": 21,
       "birthdate": "15.12.1995",
       "club": "Esperance Tunis",
@@ -173,8 +173,8 @@
     },
     {
       "nation": "Tunisia",
-      "first_name": "Anis Ben",
-      "last_name": "Slimane",
+      "first_name": "Anis",
+      "last_name": "Ben Slimane",
       "jersey_number": 25,
       "birthdate": "16.03.2001",
       "club": "Norwich City",
@@ -239,8 +239,8 @@
     },
     {
       "nation": "Tunisia",
-      "first_name": "Mortadha Ben",
-      "last_name": "Ouanes",
+      "first_name": "Mortadha",
+      "last_name": "Ben Ouanes",
       "jersey_number": 12,
       "birthdate": "02.07.1994",
       "club": "Kasimpasa",

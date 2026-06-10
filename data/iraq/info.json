@@ -8,8 +8,8 @@
   "players": [
     {
       "nation": "Iraq",
-      "first_name": "Ahmed Basil",
-      "last_name": "Fadhil",
+      "first_name": "Ahmed",
+      "last_name": "Basil Fadhil",
       "jersey_number": 22,
       "birthdate": "19.08.1996",
       "club": "Al-Shorta SC",
@@ -63,8 +63,8 @@
     },
     {
       "nation": "Iraq",
-      "first_name": "Frans Dhia",
-      "last_name": "Putros",
+      "first_name": "Frans",
+      "last_name": "Dhia Putros",
       "jersey_number": 26,
       "birthdate": "14.07.1993",
       "club": "PERSIB Bandung",
