@@ -5,14 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Pick Nation</title>
 <style>
+/* --- OFFIZIELLE TURNIER-SCHRIFT EINBINDEN --- */
+@font-face {
+    font-family: 'FWC2026';
+    src: url('assets/FWC2026.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body { 
     margin: 0; 
-    padding: 10px 6px; /* Radikal gekürzte Ränder links/rechts fürs Handy */
-    font-family: Arial, sans-serif; 
+    padding: 10px 6px; 
+    font-family: 'FWC2026', Arial, sans-serif; /* Deine WM-Schriftart */
     color: white; 
     display: flex; 
     flex-direction: column; 
@@ -23,11 +31,14 @@ body {
 }
 
 h1 { 
-    margin-top: calc(env(safe-area-inset-top, 0px) + 2px); /* Extrem nah an die Browser-Zeile geklebt */
-    margin-bottom: 8px; /* Kaum noch Abstand nach unten */
-    font-size: 20px; /* Kleinere, kompakte Überschrift */
+    /* 1. Überschrift maximal nach oben gezogen */
+    margin-top: calc(env(safe-area-inset-top, 0px) + 0px); 
+    margin-bottom: 6px; 
+    font-size: 22px; 
     text-transform: uppercase;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    font-family: 'FWC2026', Arial, sans-serif;
+    letter-spacing: 1px;
 }
 
 /* --- GRUPPEN WRAPPER --- */
@@ -35,7 +46,7 @@ h1 {
     display: grid;
     width: 100%;
     max-width: 1400px;
-    gap: 8px; /* Abstand zwischen den Gruppenboxen stark verringert */
+    gap: 8px; 
     padding-bottom: 20px;
 }
 
@@ -44,15 +55,15 @@ h1 {
     display: flex;
     align-items: center;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.6); /* Dünnerer Rahmen spart Platz */
+    border: 1px solid rgba(255, 255, 255, 0.6); 
     border-radius: 8px;
-    padding: 4px 6px; /* Extrem geschrumpftes Innen-Padding */
+    padding: 4px 6px; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Gruppenbuchstabe links */
 .group-letter {
-    font-size: 32px; /* Schmaler und kompakter */
+    font-size: 34px; 
     font-weight: bold;
     margin-right: 6px;
     min-width: 25px;
@@ -65,74 +76,79 @@ h1 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 4px; /* Engeres Raster für die Buttons */
+    gap: 4px; 
     flex-grow: 1;
 }
 
-/* --- MINI NATIONEN BUTTON --- */
+/* --- OPTIMIERTES MODERNES BUTTON-LAYOUT --- */
 .team-button {
     display: flex;
-    flex-direction: column; 
+    flex-direction: row; /* Wappen links, Text rechts */
     align-items: center;
-    justify-content: center;
-    background: rgba(46, 111, 64, 0.9); 
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 5px;
-    padding: 3px 2px;
+    justify-content: space-between;
+    background: #2e6f40; /* Fallback, falls Farben im JSON fehlen */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 2px 4px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     color: white;
     width: 100%;
-    min-height: 42px; /* Extrem flache Buttons, um vertikalen Platz zu sparen */
+    min-height: 44px; 
+    position: relative;
+    overflow: hidden;
 }
 
+/* Flagge füllt nun fast die komplette Höhe aus */
 .team-button img { 
-    width: 22px; 
-    height: 14px; 
-    margin-bottom: 1px;
+    height: 34px; 
+    width: auto;
+    max-width: 65%;
     object-fit: contain; 
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
 }
 
-/* Text-Schutz vor Überlauf */
+/* Um 90 Grad gedrehtes Länderkürzel an der rechten Seite */
 .team-button span {
     font-size: 10px;
     font-weight: bold;
     text-align: center;
-    width: 100%;
-    white-space: nowrap; /* Verhindert zweizeiligen Text, der die Boxen sprengt */
-    overflow: hidden; /* Schneidet zu langen Text ab */
-    text-overflow: ellipsis; /* Fügt ... bei zu langen Namen an */
-    line-height: 1.1;
+    font-family: 'FWC2026', Arial, sans-serif;
+    
+    /* CSS Magic für die vertikale Schrift */
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    
+    white-space: nowrap;
+    line-height: 1;
+    padding-left: 2px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+    opacity: 0.95;
 }
 
 .team-button:hover { 
-    background: #00ffcc; 
-    color: #000; 
+    transform: scale(1.02);
+    box-shadow: inset 0 0 100px rgba(255,255,255,0.2); /* Heller Glow-Effekt statt Farbzerstörung */
 }
 
-/* --- DESKTOP LAYOUT (Bleibt unangetastet weit und groß) --- */
+/* --- DESKTOP LAYOUT --- */
 @media (min-width: 768px) {
     body { padding: 20px; }
-    h1 { margin-top: 30px; margin-bottom: 30px; font-size: 32px; }
+    h1 { margin-top: 20px; margin-bottom: 25px; font-size: 36px; }
     #groups { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-    .group-box { padding: 15px; border: 2px solid rgba(255, 255, 255, 0.8); }
-    .group-letter { font-size: 60px; margin-right: 15px; min-width: 50px; }
+    .group-box { padding: 12px; border: 2px solid rgba(255, 255, 255, 0.8); }
+    .group-letter { font-size: 50px; margin-right: 12px; min-width: 45px; }
     .teams-grid { gap: 10px; }
-    .team-button { min-height: 70px; padding: 8px 5px; }
-    .team-button img { width: 35px; height: 22px; margin-bottom: 4px; }
-    .team-button span { font-size: 11px; white-space: normal; overflow: visible; }
+    .team-button { min-height: 65px; padding: 4px 8px; }
+    .team-button img { height: 50px; }
+    .team-button span { font-size: 13px; }
 }
 
-/* --- IPHONE SCREEN OPTIMIERUNG (2x6 Grid maximal gestaucht) --- */
+/* --- IPHONE SCREEN OPTIMIERUNG --- */
 @media (max-width: 767px) {
     #groups {
-        grid-template-columns: repeat(2, 1fr); /* 2 Spalten, 6 Zeilen */
-        gap: 6px; /* Minimale Lücke zwischen den 12 Blöcken */
-    }
-    
-    .team-button span {
-        /* Nutzt die Viewport-Breite (vw), damit die Schrift auf kleineren iPhones (z.B. SE) automatisch mitschrumpft */
-        font-size: 2.4vw; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 6px; 
     }
 }
 </style>
@@ -166,9 +182,18 @@ fetch("./data/worldcup_teams.json")
 
             const btn = document.createElement("button");
             btn.className = "team-button";
+            
+            // Wenn color_1 und color_2 im JSON existieren, erstelle einen schicken Farbverlauf
+            if(team.color_1 && team.color_2) {
+                btn.style.background = `linear-gradient(135deg, ${team.color_1}, ${team.color_2})`;
+            }
+
+            // Nutzt "country_code" falls vorhanden, sonst Fallback auf die ersten 3 Buchstaben des Namens
+            const displayCode = team.country_code ? team.country_code : team.name.substring(0,3).toUpperCase();
+
             btn.innerHTML = `
                 <img src="${team.flag}" alt="${team.name}"> 
-                <span>${team.name}</span>
+                <span>${displayCode}</span>
             `;
             
             btn.onclick = () => { window.location.href = `game.html?team=${teamKey}`; };
