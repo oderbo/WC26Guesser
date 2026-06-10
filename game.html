@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>WC Game V4 - Game Over Reveal</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #0f1115;
+    color: white;
+}
+
+body {
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ======================================================== */
+/* 1. DESKTOP LAYOUT                                        */
+/* ======================================================== */
+.layout {
+    display: grid;
+    grid-template-columns: 260px 1fr 320px; 
+    gap: 16px;
+    padding: 20px;
+    height: calc(100vh - 80px); 
+    width: 100%;
+    align-items: center;
+}
+
+.header-mobile-wrap {
+    display: none; 
+}
+
+.side-content {
+    padding: 16px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.center { text-align: center; }
+.team-logo { width: 110px; }
+
+.timer {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 8px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+/* Erweiterte Desktop-Karte */
+.card {
+    display: flex;
+    gap: 12px;
+    background: rgba(20, 22, 27, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.card img.player-img {
+    width: 55px;
+    height: 68px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    font-size: 13px;
+    color: #cccccc;
+}
+
+.card-info .player-name {
+    font-size: 15px;
+    color: #ffffff;
+}
+
+.card-info .meta-row {
+    display: flex;
+    gap: 8px;
+}
+
+.card-info .club-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.card img.club-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+.panel-pitch {
+    background: rgba(30,30,30,0.75);
+    border-radius: 14px;
+    padding: 16px;
+    height: 100%;
+    max-height: 720px; 
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.pitch {
+    background: linear-gradient(#2e7d32,#1b5e20);
+    border-radius: 14px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    padding: 20px 10px; 
+}
+
+.pitch-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    width: 100%;
+    height: 90px;
+}
+
+.circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 4px solid var(--c2, #fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--c1, #333);
+    color: var(--c3, #fff);
+    font-weight: bold;
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Roter Rand für unerratene Spieler nach Game Over */
+.circle.revealed-failed {
+    border-color: #ff3b30 !important;
+}
+
+/* Klickbar-Effekt nach Spielende */
+.circle.clickable {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.circle.clickable:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 12px rgba(255,255,255,0.5);
+}
+
+.circle img { 
+    width: 100% !important; 
+    height: 100% !important; 
+    object-fit: cover !important; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    z-index: 1;
+}
+.circle span { position: relative; z-index: 2; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+.pos-outer { position: absolute; }
+
+.input-wrap {
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    background: rgba(15, 17, 21, 0.9);
+}
+
+input {
+    width: 40%;
+    padding: 14px;
+    border-radius: 30px;
+    border: none;
+    text-align: center;
+    font-size: 16px;
+    outline: none;
+}
+
+input:disabled {
+    background: #22252a;
+    color: #555;
+    cursor: not-allowed;
+}
+
+/* Buttons */
+.btn-container-desktop {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn-leave, .btn-finish {
+    background: #ff3b30;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-finish {
+    background: #ff9500; /* Orange für Finish */
+}
+
+/* ======================================================== */
+/* 2. PLAYER MODAL / POPUP                                  */
+/* ======================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Desktop Modal Design */
+.modal-content {
+    background: #1c1e24;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    width: 420px;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    font-size: 22px;
+    color: #aaa;
+    cursor: pointer;
+}
+.modal-close:hover { color: #fff; }
+
+/* Struktur im Modal (Wiederverwendung deiner .card Styles) */
+.modal-body {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.modal-body img.modal-player-img {
+    width: 100px;
+    height: 125px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+}
+.modal-body .card-info {
+    font-size: 14px;
+}
+.modal-body .player-name {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+/* ======================================================== */
+/* 3. SMARTPHONE LAYOUT (iPad & iPhone)                     */
+/* ======================================================== */
+@media (max-width: 850px) {
+    .desktop-only, 
+    .id-desktop-left {
+        display: none !important; 
+    }
+
+    .layout {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 4px;
+        height: 100%; 
+        align-items: stretch;
+    }
+
+    .header-mobile-wrap {
+        display: flex;
+        width: 100%;
+        height: 45px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px;
+        flex-shrink: 0;
+    }
+
+    .mobile-left-content {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 35%;
+    }
+    .mobile-left-content h2 { display: none; }
+    .team-logo { width: 30px; } 
+    .timer { font-size: 13px; margin-top: 0; padding: 3px 6px; }
+
+    .mobile-btn-wrap {
+        display: flex;
+        gap: 4px;
+    }
+
+    .btn-leave, .btn-finish {
+        position: static; 
+        padding: 6px 10px;
+        font-size: 11px;
+        border-radius: 10px;
+    }
+
+    .mobile-right-content {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 35%;
+    }
+    .mobile-right-content h3 { display: none; } 
+    
+    #historyMobile {
+        display: flex;
+        gap: 3px;
+    }
+    
+    #historyMobile .card {
+        margin-bottom: 0;
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    #historyMobile .card-info { display: none; } 
+    #historyMobile .card img.player-img { width: 24px; height: 30px; border: 1px solid rgba(255,255,255,0.3); }
+
+    .panel-pitch {
+        flex: 1; 
+        padding: 0;
+        background: transparent;
+        min-height: 0; 
+        max-height: none; 
+    }
+    
+    .pitch {
+        padding: 4px;
+        justify-content: space-around; 
+    }
+
+    .pitch-row {
+        height: calc(100% / 6);
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
+        gap: 0;
+    }
+
+    .mobile-zone-left {
+        display: flex;
+        gap: 4px;
+        flex: 1;
+        justify-content: flex-start;
+        padding-left: 6px;
+    }
+
+    .mobile-zone-right {
+        display: flex;
+        gap: 4px;
+        flex: 1;
+        justify-content: flex-end;
+        padding-right: 6px;
+    }
+
+    .mobile-zone-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        flex: 3; 
+    }
+
+    .circle {
+        width: var(--m-size, 40px);
+        height: var(--m-size, 40px);
+        border-width: 2px;
+        font-size: var(--m-fs, 10px);
+    }
+
+    .pos-outer {
+        position: static !important;
+        left: auto !important;
+        right: auto !important;
+    }
+
+    .input-wrap {
+        height: 46px;
+        padding: 0 4px;
+        background: #0f1115;
+        flex-shrink: 0;
+    }
+
+    input {
+        width: 100%; 
+        padding: 8px;
+        font-size: 15px;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    /* Mobile Anpassung für das Popup laut deiner Vorgabe */
+    .modal-content {
+        width: 92%; /* Fast so breit wie der Bildschirm */
+        max-width: 480px;
+        padding: 12px;
+        /* Ergibt ein ca. 2:1 Verhältnis (Breite doppelt so groß wie Höhe) */
+        aspect-ratio: 2 / 1; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .modal-body {
+        gap: 14px;
+    }
+
+    .modal-body img.modal-player-img {
+        width: 30%; /* Linker Bereich groß ausgefüllt */
+        height: auto;
+        aspect-ratio: 55 / 68;
+    }
+    
+    .modal-body .card-info {
+        flex: 1;
+        font-size: 12px;
+    }
+    .modal-body .player-name {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout" id="mainLayout">
+
+    <div class="side-content center id-desktop-left">
+        <img id="logo" class="team-logo">
+        <h2 id="name"></h2>
+        <div class="timer id-timer-desktop">02:00</div>
+        
+        <div class="btn-container-desktop">
+            <a href="index.html" class="btn-leave">Exit</a>
+            <button id="btnFinishDesktop" class="btn-finish">Finish</button>
+        </div>
+    </div>
+
+    <div class="header-mobile-wrap">
+        <div class="mobile-left-content">
+            <img id="logoMobile" class="team-logo">
+            <div class="timer id-timer-mobile">02:00</div>
+        </div>
+
+        <div class="mobile-btn-wrap">
+            <a href="index.html" class="btn-leave">Exit</a>
+            <button id="btnFinishMobile" class="btn-finish">Finish</button>
+        </div>
+
+        <div class="mobile-right-content">
+            <div id="historyMobile"></div>
+        </div>
+    </div>
+
+    <div class="panel-pitch" id="pitchParent">
+        <div class="pitch" id="pitch"></div>
+    </div>
+
+    <div class="side-content desktop-only">
+        <h3 style="margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">Recent Players</h3>
+        <div id="historyDesktop"></div>
+    </div>
+
+</div>
+
+<div class="input-wrap" id="inputWrap">
+    <input 
+        id="input" 
+        type="text" 
+        inputmode="search" 
+        name="search"
+        autocomplete="off" 
+        autorrect="off" 
+        autocapitalize="off" 
+        spellcheck="false" 
+        placeholder="Player..."
+    >
+</div>
+
+<div class="modal-overlay" id="playerModal" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div id="modalBody" class="modal-body">
+            </div>
+    </div>
+</div>
+
+<script>
+/* ===================== DATA & LOAD ===================== */
+const game = {
+    team: null,
+    teamDetails: null,
+    players: [],
+    history: [],
+    time: 120,
+    finished: false
+};
+
+const teamKey = new URLSearchParams(location.search).get("team") || "spain";
+
+fetch("./data/worldcup_teams.json")
+.then(r=>r.json())
+.then(d=>{
+    game.team = d.teams[teamKey];
+    return fetch(`./data/${game.team.folder}/info.json`);
+})
+.then(r=>r.json())
+.then(team=>{
+    game.teamDetails = team;
+    game.players = team.players;
+
+    document.body.style.backgroundImage = `url('./data/${game.team.folder}/background.png')`;
+    document.getElementById("logo").src = game.team.flag;
+    document.getElementById("logoMobile").src = game.team.flag;
+    document.getElementById("name").innerText = team.teamName;
+
+    renderPitch(team);
+    startTimer();
+    setupKeyboardFix();
+    setupFinishButtons();
+});
+
+const map = {
+    ST:["ST","CF"], AM:["AM","CAM"], CM:["CM"], DM:["DM","CDM"], CB:["CB"], GK:["GK"],
+    LW:["LW"], RW:["RW"], LB:["LB"], RB:["RB"]
+};
+const order = ["ST","AM","CM","DM","CB","GK"];
+
+/* ===================== RENDERING ===================== */
+function renderPitch(team){
+    const pitch = document.getElementById("pitch");
+    pitch.innerHTML = "";
+    
+    const c1 = team.color_1 || "#1565c0";
+    const c2 = team.color_2 || "#ffffff";
+    const c3 = team.color_3 || "#ffffff";
+
+    const isMobile = window.innerWidth <= 850;
+
+    order.forEach(pos => {
+        const row = document.createElement("div");
+        row.className = "pitch-row";
+
+        if (isMobile) {
+            const leftZone = document.createElement("div"); leftZone.className = "mobile-zone-left";
+            const centerZone = document.createElement("div"); centerZone.className = "mobile-zone-center";
+            const rightZone = document.createElement("div"); rightZone.className = "mobile-zone-right";
+
+            if (pos === "AM") {
+                game.players.filter(p => map["LW"].includes((p.position||"").toUpperCase())).forEach(p => {
+                    leftZone.appendChild(createPlayerCircle(p, "LW", c1, c2, c3));
+                });
+            }
+            if (pos === "CB") {
+                game.players.filter(p => map["LB"].includes((p.position||"").toUpperCase())).forEach(p => {
+                    leftZone.appendChild(createPlayerCircle(p, "LB", c1, c2, c3));
+                });
+            }
+
+            game.players.filter(p => map[pos].includes((p.position||"").toUpperCase())).forEach(p => {
+                centerZone.appendChild(createPlayerCircle(p, pos, c1, c2, c3));
+            });
+
+            if (pos === "AM") {
+                game.players.filter(p => map["RW"].includes((p.position||"").toUpperCase())).forEach(p => {
+                    rightZone.appendChild(createPlayerCircle(p, "RW", c1, c2, c3));
+                });
+            }
+            if (pos === "CB") {
+                game.players.filter(p => map["RB"].includes((p.position||"").toUpperCase())).forEach(p => {
+                    rightZone.appendChild(createPlayerCircle(p, "RB", c1, c2, c3));
+                });
+            }
+
+            row.appendChild(leftZone);
+            row.appendChild(centerZone);
+            row.appendChild(rightZone);
+
+        } else {
+            const centerPlayers = game.players.filter(p => map[pos].includes((p.position||"").toUpperCase()));
+            const layout = distribute(centerPlayers.length);
+            layout.forEach((_, i) => {
+                const p = centerPlayers[i];
+                if(p) row.appendChild(createPlayerCircle(p, pos, c1, c2, c3));
+            });
+
+            if (pos === "AM") {
+                game.players.filter(p => map["LW"].includes((p.position||"").toUpperCase())).forEach((p, i) => {
+                    const el = createPlayerCircle(p, "LW", c1, c2, c3); el.classList.add("pos-outer");
+                    el.style.left = `${20 + i * 110}px`; row.appendChild(el);
+                });
+                game.players.filter(p => map["RW"].includes((p.position||"").toUpperCase())).forEach((p, i) => {
+                    const el = createPlayerCircle(p, "RW", c1, c2, c3); el.classList.add("pos-outer");
+                    el.style.right = `${20 + i * 110}px`; row.appendChild(el);
+                });
+            }
+            if (pos === "CB") {
+                game.players.filter(p => map["LB"].includes((p.position||"").toUpperCase())).forEach((p, i) => {
+                    const el = createPlayerCircle(p, "LB", c1, c2, c3); el.classList.add("pos-outer");
+                    el.style.left = `${20 + i * 110}px`; row.appendChild(el);
+                });
+                game.players.filter(p => map["RB"].includes((p.position||"").toUpperCase())).forEach((p, i) => {
+                    const el = createPlayerCircle(p, "RB", c1, c2, c3); el.classList.add("pos-outer");
+                    el.style.right = `${20 + i * 110}px`; row.appendChild(el);
+                });
+            }
+        }
+        pitch.appendChild(row);
+    });
+
+    adjustMobileCircleSizes();
+}
+
+function createPlayerCircle(p, defaultText, c1, c2, c3) {
+    const el = document.createElement("div");
+    el.className = "circle";
+    el.style.setProperty("--c1", c1);
+    el.style.setProperty("--c2", c2);
+    el.style.setProperty("--c3", c3);
+    
+    if (game.finished || p.guessed) {
+        el.innerHTML = `<img src="./data/${game.team.folder}/players/${p.jersey_number}.png"><span></span>`;
+        
+        if (game.finished && !p.guessed) {
+            el.classList.add("revealed-failed");
+        }
+        
+        // NEU: Wenn Spiel vorbei ist, Klick-Event für Popup hinzufügen
+        if (game.finished) {
+            el.classList.add("clickable");
+            el.addEventListener("click", () => openPlayerModal(p));
+        }
+    } else {
+        el.innerHTML = `<span>${defaultText}</span>`;
+    }
+    return el;
+}
+
+function distribute(n){
+    if(n<=1) return [0]; if(n===2) return [-1,1]; if(n===3) return [-1,0,1];
+    if(n===4) return [-2,-1,1,2]; if(n===5) return [-2,-1,0,1,2];
+    let arr=[]; for(let i=0; i<n; i++) arr.push(i); return arr;
+}
+
+function adjustMobileCircleSizes() {
+    if (window.innerWidth > 850) return;
+    
+    const pitchElement = document.getElementById("pitch");
+    if (!pitchElement) return;
+    const pitchHeight = pitchElement.getBoundingClientRect().height;
+    
+    let idealSize = Math.floor((pitchHeight / 6) - 8);
+    idealSize = Math.max(34, Math.min(40, idealSize)); 
+    
+    const fontSize = Math.max(9, Math.floor(idealSize * 0.24));
+
+    const circles = document.querySelectorAll(".circle");
+    circles.forEach(c => {
+        c.style.setProperty("--m-size", `${idealSize}px`);
+        c.style.setProperty("--m-fs", `${fontSize}px`);
+    });
+}
+
+/* ===================== ALTERSBERECHNUNG ===================== */
+function calculateAge(birthdateString) {
+    if (!birthdateString) return "N/A";
+    const today = new Date();
+    const birthDate = new Date(birthdateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
+/* ===================== INPUT & UPDATES ===================== */
+document.getElementById("input").addEventListener("input",(e)=>{
+    if(game.finished) return; 
+    
+    const v = e.target.value.toLowerCase().trim();
+    if(!v) return;
+    const p = game.players.find(pl=>{
+        if(pl.guessed) return false;
+        const firstName = (pl.first_name || "").toLowerCase().trim();
+        const lastName = (pl.last_name || "").toLowerCase().trim();
+        const full = lastName ? `${firstName} ${lastName}` : firstName;
+        return v === full || v === firstName || v === lastName || (pl.aliases || []).map(a=>a.toLowerCase().trim()).includes(v);
+    });
+    if(p){
+        p.guessed = true;
+        e.target.value = "";
+        renderPitch(game.teamDetails);
+        updateHistories(p);
+        
+        const allDone = game.players.every(pl => pl.guessed);
+        if(allDone) {
+            endGame("Congratulations! You found everyone!");
+        }
+    }
+});
+
+function updateHistories(p){
+    game.history.unshift(p);
+    game.history = game.history.slice(0, 3);
+    
+    const hDesktop = document.getElementById("historyDesktop");
+    if (hDesktop) {
+        hDesktop.innerHTML = "";
+        game.history.forEach(x => {
+            const age = calculateAge(x.birthdate);
+            const firstName = x.first_name ? `${x.first_name} ` : "";
+            const fullName = `${firstName}${x.last_name}`;
+            const clubClean = (x.club || "").trim();
+            
+            const d = document.createElement("div");
+            d.className = "card";
+            d.innerHTML = `
+                <img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png">
+                <div class="card-info">
+                    <div class="player-name"><b>${fullName}</b></div>
+                    <div class="meta-row">
+                        <span>#${x.jersey_number || "N/A"}</span> • 
+                        <span>${age} Yrs</span> • 
+                        <span>${x.height || "—"}</span>
+                    </div>
+                    <div class="club-row">
+                        <img class="club-icon" src="./data/${game.team.folder}/clubs/${clubClean}.png" onerror="this.style.display='none'">
+                        <span>${x.club || "No Club"}</span>
+                    </div>
+                </div>
+            `;
+            hDesktop.appendChild(d);
+        });
+    }
+
+    const hMobile = document.getElementById("historyMobile");
+    if (hMobile) {
+        hMobile.innerHTML = "";
+        game.history.forEach(x => {
+            const d = document.createElement("div");
+            d.className = "card";
+            d.innerHTML = `<img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png">`;
+            hMobile.appendChild(d);
+        });
+    }
+}
+
+/* ===================== FINISH BUTTON MECHANIC ===================== */
+function setupFinishButtons() {
+    const handler = () => {
+        if(game.finished) return;
+        game.time = 0; // Setzt Timer auf Null
+        endGame("Game stopped! Missing players have been revealed.");
+    };
+    
+    document.getElementById("btnFinishDesktop").addEventListener("click", handler);
+    document.getElementById("btnFinishMobile").addEventListener("click", handler);
+}
+
+/* ===================== GAME OVER HANDLING ===================== */
+function endGame(message) {
+    game.finished = true;
+    
+    const inputField = document.getElementById("input");
+    if(inputField) {
+        inputField.disabled = true;
+        inputField.placeholder = "Game Over";
+        inputField.value = "";
+        inputField.blur();
+    }
+    
+    // Finish-Buttons ausblenden nach Spielende
+    document.getElementById("btnFinishDesktop").style.display = "none";
+    document.getElementById("btnFinishMobile").style.display = "none";
+    
+    if(game.teamDetails) {
+        renderPitch(game.teamDetails);
+    }
+    
+    setTimeout(() => {
+        alert(message);
+    }, 100);
+}
+
+/* ===================== MODAL/POPUP FUNCTIONS ===================== */
+function openPlayerModal(p) {
+    const age = calculateAge(p.birthdate);
+    const firstName = p.first_name ? `${p.first_name} ` : "";
+    const fullName = `${firstName}${p.last_name}`;
+    const clubClean = (p.club || "").trim();
+
+    const body = document.getElementById("modalBody");
+    body.innerHTML = `
+        <img class="modal-player-img" src="./data/${game.team.folder}/players/${p.jersey_number}.png">
+        <div class="card-info">
+            <div class="player-name"><b>${fullName}</b></div>
+            <div class="meta-row" style="margin-bottom: 6px;">
+                <span>#${p.jersey_number || "N/A"}</span> • 
+                <span>${p.position || "N/A"}</span> • 
+                <span>${age} Yrs</span> • 
+                <span>${p.height || "—"}</span>
+            </div>
+            <div class="club-row">
+                <img class="club-icon" src="./data/${game.team.folder}/clubs/${clubClean}.png" onerror="this.style.display='none'">
+                <span>${p.club || "No Club"}</span>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById("playerModal").classList.add("active");
+}
+
+function closeModal() {
+    document.getElementById("playerModal").classList.remove("active");
+}
+
+/* ===================== THE IOS KEYBOARD FIX ===================== */
+function setupKeyboardFix() {
+    if (!window.visualViewport) return;
+
+    const mainLayout = document.getElementById("mainLayout");
+
+    window.visualViewport.addEventListener("resize", () => {
+        const vpHeight = window.visualViewport.height;
+
+        if (window.innerWidth <= 850) {
+            mainLayout.style.height = `${vpHeight - 46}px`;
+            window.scrollTo(0, 0);
+            adjustMobileCircleSizes();
+        } else {
+            mainLayout.style.height = "calc(100vh - 80px)";
+        }
+    });
+}
+
+window.addEventListener("resize", () => {
+    if(game.teamDetails) renderPitch(game.teamDetails);
+});
+
+function startTimer(){
+    const td = document.querySelector(".id-timer-desktop");
+    const tm = document.querySelector(".id-timer-mobile");
+    const interval = setInterval(()=>{
+        if(game.finished) {
+            clearInterval(interval);
+            return;
+        }
+        game.time--;
+        let m = String(Math.floor(game.time/60)).padStart(2,"0");
+        let s = String(game.time%60).padStart(2,"0");
+        if(td) td.innerText = `${m}:${s}`;
+        if(tm) tm.innerText = `${m}:${s}`;
+        
+        if(game.time<=0){ 
+            clearInterval(interval);
+            endGame("Time up! Missing players have been revealed."); 
+        }
+    },1000);
+}
+</script>
+</body>
+</html>

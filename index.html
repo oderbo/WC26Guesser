@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>World Cup Game Hub</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body { 
+    margin: 0; 
+    padding: 20px;
+    font-family: Arial, sans-serif; 
+    color: white; 
+    
+    display: flex; 
+    align-items: center; 
+    flex-direction: column; 
+    
+    min-height: 100dvh;
+    width: 100%;
+    
+    background-color: #3f57f5; 
+    background-image: url('assets/main_background.png?v=1');
+    background-repeat: no-repeat;
+}
+
+/* --- LOGO WRAPPER & RESPONSIVE DESIGN --- */
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-mask {
+    width: 100%;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: top center;
+    
+    background: linear-gradient(
+        135deg, 
+        #bf953f 0%, 
+        #fcf6ba 25%, 
+        #b38728 50%, 
+        #fbf5b7 75%, 
+        #aa771c 100%
+    );
+    background-size: 400% 400%;
+    animation: goldGlow 8s ease infinite;
+}
+
+/* Der Freiraum in der Mitte (Standard: unsichtbar fürs Handy) */
+.center-space {
+    display: none;
+}
+
+/* --- DESKTOP LAYOUT --- */
+@media (min-width: 768px) {
+    body {
+        justify-content: flex-start; 
+        background-position: center;
+        background-size: contain; 
+        position: relative;
+    }
+
+    .logo-container {
+        margin-top: 5vh; 
+        margin-bottom: 0;
+    }
+
+    .logo-desktop {
+        display: block;
+        max-width: 1200px; 
+        aspect-ratio: 3 / 1; 
+        -webkit-mask-image: url('assets/WC26Guesser.svg');
+        mask-image: url('assets/WC26Guesser.svg');
+    }
+    
+    .logo-mobile {
+        display: none; 
+    }
+
+    /* ERZWINGT DIE BUTTONS EXAKT BEI 50% VERTIKALER HÖHE */
+    .menu-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 1600px; 
+        gap: 35px; /* Gleicher Abstand (x) zwischen allen Elementen */
+    }
+
+    .image-btn {
+        width: 14%; 
+    }
+
+    /* Erzeugt auf dem Desktop den exakt 20% breiten Freiraum in der Mitte */
+    .center-space {
+        display: block;
+        width: 20%;
+        aspect-ratio: 1 / 1;
+        visibility: hidden; /* Macht das Element komplett unsichtbar, hält aber den Platz frei */
+    }
+}
+
+/* --- MOBILE LAYOUT (Garantiert wieder 2x2 Grid) --- */
+@media (max-width: 767px) {
+    body {
+        justify-content: space-between; 
+        background-size: cover; 
+        background-position: center -90px; 
+    }
+
+    .logo-container {
+        margin-top: calc(env(safe-area-inset-top, 0px) + 0vh);
+        margin-bottom: 30px;
+        padding: 0 15px;
+    }
+    
+    .logo-desktop {
+        display: none; 
+    }
+    
+    .logo-mobile {
+        display: block;
+        max-width: 320px; 
+        aspect-ratio: 1.2 / 1; 
+        -webkit-mask-image: url('assets/WC_26_GUESSER.svg');
+        mask-image: url('assets/WC_26_GUESSER.svg');
+    }
+
+    /* Das feste 2x2 Grid fürs iPhone */
+    .menu-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px; 
+        justify-items: center;
+        align-items: center;
+        max-width: 280px;
+        margin-top: auto;
+        margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); 
+    }
+
+    .image-btn {
+        width: 30vw; 
+    }
+}
+
+@keyframes goldGlow {
+    0% { background-position: 0% 50%; filter: drop-shadow(0 0 4px rgba(251, 245, 183, 0.4)); }
+    50% { background-position: 100% 50%; filter: drop-shadow(0 0 12px rgba(251, 245, 183, 0.85)); }
+    100% { background-position: 0% 50%; filter: drop-shadow(0 0 4px rgba(251, 245, 183, 0.4)); }
+}
+
+/* --- IMAGE BUTTON SYSTEM --- */
+.image-btn {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 14px; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    aspect-ratio: 1 / 1; 
+    padding: 0;
+}
+
+.image-btn:hover { 
+    transform: translateY(-4px); 
+    box-shadow: 0 8px 25px rgba(0, 255, 204, 0.4);
+    border-color: #00ffcc;
+}
+
+.image-btn:active {
+    transform: translateY(1px);
+}
+
+.image-btn:disabled { 
+    filter: grayscale(80%) brightness(60%);
+    cursor: not-allowed; 
+    box-shadow: none;
+    transform: none;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-random-nation { background-image: url('assets/country_random_button.jpg'); }
+.btn-pick-nation { background-image: url('assets/country_pick_button.jpg'); }
+.btn-player-guess { background-image: url('assets/player_guess_button.jpg'); }
+.btn-soon { background-image: url('assets/soon_button.jpg'); }
+</style>
+</head>
+<body>
+
+<div class="logo-container">
+    <div class="logo-mask logo-desktop"></div>
+    <div class="logo-mask logo-mobile"></div>
+</div>
+
+<div class="menu-container">
+    <button class="image-btn btn-random-nation" onclick="startRandom()"></button>
+    <button class="image-btn btn-pick-nation" onclick="openSelect()"></button>
+    
+    <div class="center-space"></div>
+    
+    <button class="image-btn btn-player-guess" disabled></button>
+    <button class="image-btn btn-soon" disabled></button>
+</div>
+
+<script>
+function startRandom() {
+    fetch("./data/worldcup_teams.json")
+        .then(r => r.json())
+        .then(data => {
+            const keys = Object.keys(data.teams);
+            const random = keys[Math.floor(Math.random() * keys.length)];
+            window.location.href = `game.html?team=${random}`;
+        });
+}
+
+function openSelect() {
+    window.location.href = "select.html";
+}
+</script>
+</body>
+</html>

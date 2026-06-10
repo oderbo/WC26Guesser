@@ -1,0 +1,291 @@
+{
+  "teamName": "Canada",
+  "group": "B",
+  "ranking": 30,
+  "color_1": "#FFFFFF",
+  "color_2": "#C5281C",
+  "color_3": "#2D2A26",
+  "players": [
+    {
+      "nation": "Canada",
+      "first_name": "Dayne St.",
+      "last_name": "Clair",
+      "jersey_number": 1,
+      "birthdate": "",
+      "club": "Inter Miami CF",
+      "position": "GK",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Maxime",
+      "last_name": "Crépeau",
+      "jersey_number": 16,
+      "birthdate": "",
+      "club": "Orlando City SC",
+      "position": "GK",
+      "height": "",
+      "aliases": [
+        "Crepeau"
+      ]
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Owen",
+      "last_name": "Goodman",
+      "jersey_number": 18,
+      "birthdate": "",
+      "club": "Barnsley FC",
+      "position": "GK",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Moïse",
+      "last_name": "Bombito",
+      "jersey_number": 15,
+      "birthdate": "",
+      "club": "OGC Nice",
+      "position": "CB",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Alfie",
+      "last_name": "Jones",
+      "jersey_number": 3,
+      "birthdate": "",
+      "club": "Middlesbrough FC",
+      "position": "CB",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Derek",
+      "last_name": "Cornelius",
+      "jersey_number": 13,
+      "birthdate": "",
+      "club": "Olympique Marseille",
+      "position": "CB",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Joel",
+      "last_name": "Waterman",
+      "jersey_number": 5,
+      "birthdate": "",
+      "club": "Chicago Fire FC",
+      "position": "CB",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Luc De",
+      "last_name": "Fougerolles",
+      "jersey_number": 4,
+      "birthdate": "",
+      "club": "FCV Dender EH",
+      "position": "CB",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Alphonso",
+      "last_name": "Davies",
+      "jersey_number": 19,
+      "birthdate": "",
+      "club": "Bayern Munich",
+      "position": "LB",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Alistair",
+      "last_name": "Johnston",
+      "jersey_number": 2,
+      "birthdate": "",
+      "club": "Celtic FC",
+      "position": "RB",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Richie",
+      "last_name": "Laryea",
+      "jersey_number": 22,
+      "birthdate": "",
+      "club": "Toronto FC",
+      "position": "RB",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Niko",
+      "last_name": "Sigur",
+      "jersey_number": 23,
+      "birthdate": "",
+      "club": "HNK Hajduk Split",
+      "position": "DM",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Ismaël",
+      "last_name": "Koné",
+      "jersey_number": 8,
+      "birthdate": "",
+      "club": "US Sassuolo",
+      "position": "CM",
+      "height": "",
+      "aliases": [
+        "Kone"
+      ]
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Nathan-Dylan",
+      "last_name": "Saliba",
+      "jersey_number": 25,
+      "birthdate": "",
+      "club": "RSC Anderlecht",
+      "position": "CM",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Stephen",
+      "last_name": "Eustaquio",
+      "jersey_number": 7,
+      "birthdate": "",
+      "club": "Los Angeles FC",
+      "position": "CM",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Jonathan",
+      "last_name": "Osorio",
+      "jersey_number": 21,
+      "birthdate": "",
+      "club": "Toronto FC",
+      "position": "CM",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Mathieu",
+      "last_name": "Choinière",
+      "jersey_number": 6,
+      "birthdate": "",
+      "club": "Los Angeles FC",
+      "position": "CM",
+      "height": "",
+      "aliases": [
+        "Choiniere"
+      ]
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Ali",
+      "last_name": "Ahmed",
+      "jersey_number": 20,
+      "birthdate": "",
+      "club": "Norwich City",
+      "position": "LW",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Liam",
+      "last_name": "Millar",
+      "jersey_number": 11,
+      "birthdate": "",
+      "club": "Hull City",
+      "position": "LW",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Jacob",
+      "last_name": "Shaffelburg",
+      "jersey_number": 14,
+      "birthdate": "",
+      "club": "Los Angeles FC",
+      "position": "LW",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Tajon",
+      "last_name": "Buchanan",
+      "jersey_number": 17,
+      "birthdate": "",
+      "club": "Villarreal CF",
+      "position": "RW",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Jonathan",
+      "last_name": "David",
+      "jersey_number": 10,
+      "birthdate": "",
+      "club": "Juventus FC",
+      "position": "ST",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Promise",
+      "last_name": "David",
+      "jersey_number": 24,
+      "birthdate": "",
+      "club": "Union Saint-Gilloise",
+      "position": "ST",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Tani",
+      "last_name": "Oluwaseyi",
+      "jersey_number": 12,
+      "birthdate": "",
+      "club": "Villarreal CF",
+      "position": "ST",
+      "height": "",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Cyle",
+      "last_name": "Larin",
+      "jersey_number": 9,
+      "birthdate": "",
+      "club": "Southampton FC",
+      "position": "ST",
+      "height": "",
+      "aliases": []
+    }
+  ]
+}
