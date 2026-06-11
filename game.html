@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>WC Game V4 - Keyboard & Layout Fix</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>WC26 Guesser</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+</head>
 
 <style>
 * {
@@ -12,9 +13,7 @@
 }
 
 html {
-    /* Fallback, falls JS noch nicht geladen ist */
     height: 100dvh;
-    /* Wir nutzen die dynamische JS-Variable für die echte Höhe */
     height: var(--visual-height, 100dvh);
     background-color: #0f1115;
     padding: 6px;
@@ -44,7 +43,6 @@ body {
     grid-template-columns: 260px 1fr 320px; 
     gap: 16px;
     padding: 12px;
-    /* Nutzt ebenfalls die dynamische Höhe minus Platz für Input-Wrapper */
     height: calc(var(--visual-height, 100dvh) - 100px); 
     width: 100%;
     align-items: stretch;
@@ -61,7 +59,8 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    background: rgba(20, 22, 27, 0.85);
+    /* HIER GEÄNDERT: color_3 (c3) wird zu 30% mit einem dunklen Transparenz-Hintergrund gemischt */
+    background: color-mix(in srgb, var(--c3) 30%, rgba(15, 17, 21, 0.85));
     border: 2px solid var(--c2, #fff);
     outline: 2px solid var(--c3, #fff);
     outline-offset: -4px;
@@ -335,7 +334,6 @@ body {
     align-items: center;
     width: 100%;
     padding: 0 20px;
-    /* HIER GEÄNDERT: Fest auf transparent gesetzt, ohne Variablen-Zwang */
     background: transparent; 
     flex-shrink: 0;
 }
@@ -381,8 +379,6 @@ input:disabled {
     font-weight: bold;
     text-decoration: none;
     text-align: center;
-    
-    /* NEU: Aktiviert die perfekte vertikale und horizontale Zentrierung */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -398,8 +394,6 @@ input:disabled {
     font-weight: bold;
     text-decoration: none;
     text-align: center;
-    
-    /* NEU: Damit beide Buttons auf Mobile und Desktop exakt gleich zentrieren */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -501,7 +495,6 @@ input:disabled {
         grid-template-rows: auto 1fr; 
         gap: 0px;
         padding: 4px;
-        /* Die App-Höhe zieht jetzt den Input-Wrapper dynamisch ab */
         height: calc(var(--visual-height, 100%) - 48px); 
         align-items: stretch;
     }
@@ -570,9 +563,45 @@ input:disabled {
         margin-left: auto; 
     }
     
-    #historyMobile { display: flex; gap: 3px; }
-    #historyMobile .card { margin-bottom: 0; padding: 0; background: transparent; border: none; box-shadow: none; }
-    #historyMobile .card img.player-img { width: 20px; height: 26px; border: 1px solid rgba(255,255,255,0.3); }
+    /* HIER GEÄNDERT: Abstand auf 2px, zentrierte Ausrichtung für perfekten 1px Rand */
+    #historyMobile { 
+        display: flex; 
+        gap: 2px; 
+        align-items: center; 
+    }
+    
+    /* HIER GEÄNDERT: Position auf relative, damit das Wappen absolut darauf ausgerichtet werden kann */
+    #historyMobile .card { 
+        position: relative;
+        margin-bottom: 0; 
+        padding: 0; 
+        background: transparent; 
+        border: none; 
+        box-shadow: none; 
+    }
+    
+    /* HIER GEÄNDERT: Exakt 36px Höhe für 1px Platz nach oben und unten im 38px Container */
+    #historyMobile .card img.player-img { 
+        height: 36px; 
+        width: 26px; 
+        object-fit: cover; 
+        border: 1px solid rgba(255,255,255,0.3); 
+        border-radius: 4px;
+        display: block; /* Verhindert winzige Phantom-Abstände im Container */
+    }
+
+    /* NEU: Vereinswappen Badge für Mobile */
+    .mobile-club-badge {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transform: translateX(50%); /* Mittig zur rechten Kante des Spielerbildes */
+        height: 12px; /* Exakt 1/3 der Bild-Höhe (36px) */
+        width: 12px;
+        object-fit: contain;
+        z-index: 5;
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); /* Kleiner Schatten zur besseren Lesbarkeit */
+    }
 
     .panel-pitch {
         grid-row: 2; 
@@ -629,8 +658,6 @@ input:disabled {
         background: #22252a; 
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-        
-        /* Hier ebenfalls anpassen */
         color:white; 
     }
 
@@ -658,7 +685,8 @@ input:disabled {
         
         <div class="btn-container-desktop">
             <a href="index.html" class="btn-leave">Exit</a>
-            <button id="btnFinishDesktop" class="btn-finish">Give Up</button>
+            <!-- HIER GEÄNDERT: Button heißt jetzt Stop -->
+            <button id="btnFinishDesktop" class="btn-finish">Stop</button>
         </div>
     </div>
 
@@ -718,16 +746,12 @@ input:disabled {
 
 <script>
 // ========================================================
-// KEYBOARD & VISUAL VIEWPORT HANDLER (NEU)
+// KEYBOARD & VISUAL VIEWPORT HANDLER
 // ========================================================
 function updateVisualViewport() {
     if (window.visualViewport) {
-        // Berechnet die tatsächliche sichtbare Höhe in Pixeln
         const vvHeight = window.visualViewport.height;
-        // Setzt diese dynamisch als CSS-Variable auf das HTML-Element
         document.documentElement.style.setProperty('--visual-height', `${vvHeight}px`);
-        
-        // Automatischer Scroll-Fix für iOS, damit das Layout nicht wegrutscht
         window.scrollTo(0, 0);
     }
 }
@@ -736,9 +760,9 @@ if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', updateVisualViewport);
     window.visualViewport.addEventListener('scroll', updateVisualViewport);
 }
-// Einmalig beim Laden ausführen
 updateVisualViewport();
 
+let activeMoveHandler = null; 
 
 const game = {
     team: null,
@@ -942,7 +966,51 @@ function createPlayerCircle(p, defaultText, c1, c2, c3) {
         }
         if (game.finished) {
             el.classList.add("clickable");
-            el.addEventListener("click", () => openPlayerModal(p));
+            
+            if (window.innerWidth > 850) {
+                let hoverTimer;
+                let currentX, currentY;
+                
+                el.addEventListener("mousemove", (e) => {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                });
+
+                el.addEventListener("mouseenter", (e) => {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                    
+                    hoverTimer = setTimeout(() => {
+                        openPlayerModal(p);
+                        
+                        const startX = currentX;
+                        const startY = currentY;
+                        
+                        if (activeMoveHandler) {
+                            document.removeEventListener("mousemove", activeMoveHandler);
+                        }
+                        
+                        activeMoveHandler = (moveEvt) => {
+                            if (Math.abs(moveEvt.clientX - startX) > 10 || Math.abs(moveEvt.clientY - startY) > 10) {
+                                closeModal();
+                            }
+                        };
+                        
+                        setTimeout(() => {
+                            if (document.getElementById("playerModal").classList.contains("active")) {
+                                document.addEventListener("mousemove", activeMoveHandler);
+                            }
+                        }, 50);
+                        
+                    }, 200);
+                });
+                
+                el.addEventListener("mouseleave", () => {
+                    clearTimeout(hoverTimer);
+                });
+            } else {
+                el.addEventListener("click", () => openPlayerModal(p));
+            }
         }
     } else {
         el.innerHTML = `<span>${defaultText}</span>`;
@@ -1003,18 +1071,15 @@ document.getElementById("input").addEventListener("input", (e) => {
     const v = e.target.value.toLowerCase().trim();
     if (!v) return;
     
-    // 1. Spieler finden basierend auf der neuen Logik
     const p = game.players.find(pl => {
         if (pl.guessed) return false;
         
         const firstName = (pl.first_name || "").toLowerCase().trim();
         const lastName = (pl.last_name || "").toLowerCase().trim();
         
-        // Prüfe auf vollen Namen, Alias oder Nachnamen
         if (v === `${firstName} ${lastName}` || (pl.aliases || []).map(a=>a.toLowerCase().trim()).includes(v) || (lastName && v === lastName)) {
             return true;
         }
-        // Prüfe auf Vornamen NUR wenn kein Nachname existiert
         if (!lastName && v === firstName) {
             return true;
         }
@@ -1022,20 +1087,16 @@ document.getElementById("input").addEventListener("input", (e) => {
     });
 
     if (p) {
-        // 2. Spieler als erraten markieren
         p.guessed = true;
         e.target.value = "";
         
-        // 3. UI: Kreis auf dem Spielfeld aktualisieren
         const targetCircle = document.querySelector(`.circle[data-jersey="${p.jersey_number}"]`);
         if(targetCircle) {
             targetCircle.innerHTML = `<img src="./data/${game.team.folder}/players/${p.jersey_number}.png" alt=""><span></span>`;
         }
         
-        // 4. UI: Historie aktualisieren (Dies ist wichtig, damit die Historie rechts erscheint)
         updateHistories(p);
         
-        // 5. Spiel beenden wenn alle erraten
         if(game.players.every(pl => pl.guessed)) {
             endGame();
         }
@@ -1079,10 +1140,17 @@ function updateHistories(p){
     const hMobile = document.getElementById("historyMobile");
     if (hMobile) {
         hMobile.innerHTML = "";
-        game.history.forEach(x => {
+        // HIER GEÄNDERT: Array umdrehen, damit das neueste Bild ganz rechts generiert wird und den Rest nach links schiebt.
+        [...game.history].reverse().forEach(x => {
             const d = document.createElement("div");
             d.className = "card";
-            d.innerHTML = `<img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png" alt="">`;
+            const clubClean = (x.club || "").trim();
+            
+            // HIER GEÄNDERT: Wappen für das Overlap-Design in HTML eingebaut
+            d.innerHTML = `
+                <img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png" alt="">
+                <img class="mobile-club-badge" src="./data/${game.team.folder}/clubs/${clubClean}.png" onerror="this.style.display='none'" alt="">
+            `;
             hMobile.appendChild(d);
         });
     }
@@ -1150,6 +1218,11 @@ function openPlayerModal(p) {
 
 function closeModal() {
     document.getElementById("playerModal").classList.remove("active");
+    
+    if (activeMoveHandler) {
+        document.removeEventListener("mousemove", activeMoveHandler);
+        activeMoveHandler = null;
+    }
 }
 </script>
 </body>
