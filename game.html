@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>WC Game V4 - Game Over Reveal</title>
+<title>WC Game V4 - Keyboard & Layout Fix</title>
 
 <style>
 * {
@@ -11,33 +11,43 @@
     font-family: Arial, sans-serif;
 }
 
-html, body {
+html {
+    /* Fallback, falls JS noch nicht geladen ist */
+    height: 100dvh;
+    /* Wir nutzen die dynamische JS-Variable für die echte Höhe */
+    height: var(--visual-height, 100dvh);
+    background-color: #0f1115;
+    padding: 6px;
+    box-sizing: border-box;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body {
     margin: 0;
     padding: 0;
     height: 100%;
     overflow: hidden;
-    background: #0f1115;
     color: white;
-}
-
-body {
-    background-size: cover;
-    background-position: center;
     display: flex;
     flex-direction: column;
+    background: transparent;
 }
 
 /* ======================================================== */
-/* 1. DESKTOP LAYOUT                                        */
+/* 1. LAYOUT STRUCTURING (DESKTOP & COMMON)                 */
 /* ======================================================== */
 .layout {
     display: grid;
     grid-template-columns: 260px 1fr 320px; 
     gap: 16px;
-    padding: 20px;
-    height: calc(100vh - 80px); 
+    padding: 12px;
+    /* Nutzt ebenfalls die dynamische Höhe minus Platz für Input-Wrapper */
+    height: calc(var(--visual-height, 100dvh) - 100px); 
     width: 100%;
-    align-items: center;
+    align-items: stretch;
 }
 
 .header-mobile-wrap {
@@ -51,10 +61,34 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    background: rgba(20, 22, 27, 0.85);
+    border: 2px solid var(--c2, #fff);
+    outline: 2px solid var(--c3, #fff);
+    outline-offset: -4px;
+    border-radius: 14px;
 }
 
 .center { text-align: center; }
-.team-logo { width: 110px; }
+
+.desktop-media-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+.desktop-media-wrapper .team-logo {
+    width: 140px;
+    height: auto;
+    object-fit: contain;
+}
+.desktop-media-wrapper .nation-flag {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
 
 .timer {
     font-size: 24px;
@@ -66,11 +100,10 @@ body {
     display: inline-block;
 }
 
-/* Erweiterte Desktop-Karte */
 .card {
     display: flex;
     gap: 12px;
-    background: rgba(20, 22, 27, 0.85);
+    background: rgba(10, 11, 14, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 12px;
     border-radius: 12px;
@@ -119,41 +152,133 @@ body {
     object-fit: contain;
 }
 
+/* ======================================================== */
+/* 2. PITCH & LINES SYSTEM                                  */
+/* ======================================================== */
 .panel-pitch {
-    background: rgba(30,30,30,0.75);
-    border-radius: 14px;
-    padding: 16px;
+    background: rgba(20, 22, 27, 0.85);
+    padding: 0;
     height: 100%;
-    max-height: 720px; 
-    margin: 0 auto;
     width: 100%;
     display: flex;
     flex-direction: column;
+    border: 2px solid var(--c2, #fff);
+    outline: 2px solid var(--c3, #fff);
+    outline-offset: -4px;
+    border-radius: 14px;
+    overflow: hidden;
 }
 
 .pitch {
     background: linear-gradient(#2e7d32,#1b5e20);
-    border-radius: 14px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between; 
-    padding: 20px 10px; 
+    padding: 1.5vh 10px; 
+    position: relative;
+}
+
+.pitch::before {
+    content: "";
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    pointer-events: none;
+    z-index: 1;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: inherit;
+}
+
+.pitch-center-line {
+    position: absolute;
+    top: 50%; left: 0; width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.25);
+    z-index: 1;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+.pitch-center-circle {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: clamp(60px, 14vh, 120px); 
+    height: clamp(60px, 14vh, 120px);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.pitch-box-top {
+    position: absolute;
+    top: 0; left: 50%;
+    width: 45%; 
+    height: clamp(6%, 11vh, 14%); 
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-top: none;
+    transform: translateX(-50%);
+    z-index: 1;
+    pointer-events: none;
+}
+.pitch-box-bottom {
+    position: absolute;
+    bottom: 0; left: 50%;
+    width: 45%; 
+    height: clamp(6%, 11vh, 14%); 
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-bottom: none;
+    transform: translateX(-50%);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .pitch-row {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
     position: relative;
     width: 100%;
-    height: 90px;
+    height: calc(100% / 6); 
+    z-index: 2;
 }
 
+.center-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.wing-block {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    z-index: 5;
+}
+.wing-block.left-side { justify-content: flex-start; padding-left: 2px; }
+.wing-block.right-side { justify-content: flex-end; padding-right: 2px; }
+
+.wing-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ======================================================== */
+/* 3. PLAYER CIRCLES & GLOWING ANIMATION                    */
+/* ======================================================== */
 .circle {
-    width: 90px;
-    height: 90px;
+    width: clamp(40px, 8.5vh, 90px); 
+    height: clamp(40px, 8.5vh, 90px);
     border-radius: 50%;
     border: 4px solid var(--c2, #fff);
     display: flex;
@@ -165,14 +290,20 @@ body {
     font-weight: bold;
     position: relative;
     flex-shrink: 0;
+    font-size: clamp(10px, 1.8vh, 16px);
 }
 
-/* Roter Rand für unerratene Spieler nach Game Over */
 .circle.revealed-failed {
-    border-color: #ff3b30 !important;
+    background: #1c1e22 !important;
+    border-color: #ff3333 !important;
+    animation: neonGlow 1.5s ease-in-out infinite alternate;
 }
 
-/* Klickbar-Effekt nach Spielende */
+@keyframes neonGlow {
+    from { box-shadow: 0 0 6px #ff1a1a, inset 0 0 6px #ff1a1a; }
+    to { box-shadow: 0 0 18px #ff4d4d, inset 0 0 10px #ff4d4d; }
+}
+
 .circle.clickable {
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -193,8 +324,10 @@ body {
     z-index: 1;
 }
 .circle span { position: relative; z-index: 2; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
-.pos-outer { position: absolute; }
 
+/* ======================================================== */
+/* 4. INPUT WRAPPER WITH DOUBLE STYLE                        */
+/* ======================================================== */
 .input-wrap {
     height: 80px;
     display: flex;
@@ -202,26 +335,35 @@ body {
     align-items: center;
     width: 100%;
     padding: 0 20px;
-    background: rgba(15, 17, 21, 0.9);
+    /* HIER GEÄNDERT: Fest auf transparent gesetzt, ohne Variablen-Zwang */
+    background: transparent; 
+    flex-shrink: 0;
 }
 
 input {
     width: 40%;
     padding: 14px;
     border-radius: 30px;
-    border: none;
     text-align: center;
-    font-size: 16px;
+    font-size: 20px;
     outline: none;
+    color: #22252a; 
+    background: rgba(255, 255, 255, 0.15); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid var(--c2, #fff);
+    outline: 2px solid var(--c3, #fff);
+    outline-offset: -4px;
 }
 
 input:disabled {
     background: #22252a;
     color: #555;
     cursor: not-allowed;
+    outline: none;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Buttons */
 .btn-container-desktop {
     display: flex;
     gap: 10px;
@@ -229,8 +371,8 @@ input:disabled {
     margin-top: 20px;
 }
 
-.btn-leave, .btn-finish {
-    background: #ff3b30;
+.btn-leave {
+    background: #00a2ff !important;
     color: white;
     border: none;
     padding: 12px 24px;
@@ -239,14 +381,32 @@ input:disabled {
     font-weight: bold;
     text-decoration: none;
     text-align: center;
+    
+    /* NEU: Aktiviert die perfekte vertikale und horizontale Zentrierung */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-finish {
-    background: #ff9500; /* Orange für Finish */
+    background: #e63946 !important;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    
+    /* NEU: Damit beide Buttons auf Mobile und Desktop exakt gleich zentrieren */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ======================================================== */
-/* 2. PLAYER MODAL / POPUP                                  */
+/* 5. PLAYER MODAL / POPUP                                  */
 /* ======================================================== */
 .modal-overlay {
     position: fixed;
@@ -265,223 +425,220 @@ input:disabled {
     pointer-events: auto;
 }
 
-/* Desktop Modal Design */
 .modal-content {
-    background: #1c1e24;
-    border: 1px solid rgba(255,255,255,0.15);
+    background: linear-gradient(135deg, var(--popup-bg) 0%, rgba(255,255,255,0.15) 100%), var(--popup-bg);
+    border: 2.5px solid var(--popup-border); 
+    color: var(--popup-text) !important;
     border-radius: 16px;
-    width: 420px;
+    width: 440px;
     padding: 24px;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
 .modal-close {
     position: absolute;
     top: 12px; right: 16px;
-    font-size: 22px;
-    color: #aaa;
+    font-size: 24px;
+    color: var(--popup-text);
+    opacity: 0.7;
     cursor: pointer;
 }
-.modal-close:hover { color: #fff; }
+.modal-close:hover { opacity: 1; }
 
-/* Struktur im Modal (Wiederverwendung deiner .card Styles) */
 .modal-body {
     display: flex;
     gap: 20px;
     align-items: center;
 }
 .modal-body img.modal-player-img {
-    width: 100px;
-    height: 125px;
+    width: 105px;
+    height: 130px;
     object-fit: cover;
     border-radius: 8px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.1);
 }
+
 .modal-body .card-info {
     font-size: 14px;
+    color: var(--popup-text) !important;
 }
+
 .modal-body .player-name {
-    font-size: 18px;
-    margin-bottom: 6px;
+    font-size: 22px !important;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    color: var(--popup-text) !important;
+    line-height: 1.1;
 }
 
 /* ======================================================== */
-/* 3. SMARTPHONE LAYOUT (iPad & iPhone)                     */
+/* 6. SMARTPHONE LAYOUT                                     */
 /* ======================================================== */
 @media (max-width: 850px) {
+    html {
+        padding: 0;
+        padding-top: env(safe-area-inset-top, 0px);
+    }
+    
+    body {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        height: 100%;
+    }
+
     .desktop-only, 
     .id-desktop-left {
         display: none !important; 
     }
 
     .layout {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr; 
+        gap: 0px;
         padding: 4px;
-        height: 100%; 
+        /* Die App-Höhe zieht jetzt den Input-Wrapper dynamisch ab */
+        height: calc(var(--visual-height, 100%) - 48px); 
         align-items: stretch;
     }
 
     .header-mobile-wrap {
         display: flex;
         width: 100%;
-        height: 45px;
+        height: 40px; 
         align-items: center;
-        justify-content: space-between;
-        padding: 0 4px;
+        justify-content: flex-start; 
+        padding: 0 8px;
         flex-shrink: 0;
+        background: rgba(15, 17, 21, 0.85);
+        margin-bottom: 4px; 
+        border: 1px solid var(--c2, #fff);
+        outline: 1px solid var(--c3, #fff);
+        outline-offset: -2px;
+        border-radius: 10px;
     }
 
     .mobile-left-content {
         display: flex;
         align-items: center;
         gap: 6px;
-        width: 35%;
+        height: 100%;
     }
-    .mobile-left-content h2 { display: none; }
-    .team-logo { width: 30px; } 
-    .timer { font-size: 13px; margin-top: 0; padding: 3px 6px; }
+    
+    .header-mobile-wrap .team-logo, 
+    .header-mobile-wrap .nation-flag { 
+        height: 28px; 
+        width: auto;
+        max-width: 40px;
+        object-fit: contain;
+    }
+    
+    .timer { 
+        font-size: 13px; 
+        margin-top: 0; 
+        padding: 0 8px; 
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 6px;
+    }
 
     .mobile-btn-wrap {
         display: flex;
         gap: 4px;
+        align-items: center;
+        margin-left: 6px;
     }
 
     .btn-leave, .btn-finish {
-        position: static; 
-        padding: 6px 10px;
+        height: 28px;
+        padding: 0 8px;
         font-size: 11px;
-        border-radius: 10px;
+        border-radius: 6px;
     }
 
     .mobile-right-content {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        width: 35%;
-    }
-    .mobile-right-content h3 { display: none; } 
-    
-    #historyMobile {
-        display: flex;
-        gap: 3px;
+        margin-left: auto; 
     }
     
-    #historyMobile .card {
-        margin-bottom: 0;
-        padding: 0;
-        background: transparent;
-        border: none;
-        box-shadow: none;
-    }
-    #historyMobile .card-info { display: none; } 
-    #historyMobile .card img.player-img { width: 24px; height: 30px; border: 1px solid rgba(255,255,255,0.3); }
+    #historyMobile { display: flex; gap: 3px; }
+    #historyMobile .card { margin-bottom: 0; padding: 0; background: transparent; border: none; box-shadow: none; }
+    #historyMobile .card img.player-img { width: 20px; height: 26px; border: 1px solid rgba(255,255,255,0.3); }
 
     .panel-pitch {
-        flex: 1; 
-        padding: 0;
-        background: transparent;
+        grid-row: 2; 
+        flex: 1;
         min-height: 0; 
-        max-height: none; 
+        background: transparent;
+        border: none;
+        outline: none;
+        border-radius: 12px;
+        box-shadow: inset 0 0 0 2px var(--c2, #fff), inset 0 0 0 4px var(--c3, #fff);
     }
     
     .pitch {
         padding: 4px;
         justify-content: space-around; 
     }
+    
+    .pitch::before {
+        top: 2px; left: 2px; right: 2px; bottom: 2px;
+    }
+
+    .pitch-center-circle {
+        width: clamp(40px, 11vh, 80px); 
+        height: clamp(40px, 11vh, 80px);
+    }
+
+    .pitch-box-top, .pitch-box-bottom {
+        width: 42%;
+        height: clamp(4%, 9vh, 11%);
+    }
 
     .pitch-row {
         height: calc(100% / 6);
         margin: 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0;
-        gap: 0;
-    }
-
-    .mobile-zone-left {
-        display: flex;
-        gap: 4px;
-        flex: 1;
-        justify-content: flex-start;
-        padding-left: 6px;
-    }
-
-    .mobile-zone-right {
-        display: flex;
-        gap: 4px;
-        flex: 1;
-        justify-content: flex-end;
-        padding-right: 6px;
-    }
-
-    .mobile-zone-center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 4px;
-        flex: 3; 
     }
 
     .circle {
-        width: var(--m-size, 40px);
-        height: var(--m-size, 40px);
+        width: clamp(28px, 7.5vh, 44px);
+        height: clamp(28px, 7.5vh, 44px);
         border-width: 2px;
-        font-size: var(--m-fs, 10px);
-    }
-
-    .pos-outer {
-        position: static !important;
-        left: auto !important;
-        right: auto !important;
+        font-size: clamp(7px, 1.4vh, 11px);
     }
 
     .input-wrap {
-        height: 46px;
-        padding: 0 4px;
-        background: #0f1115;
-        flex-shrink: 0;
+        height: 44px;
+        padding: 4px 10px;
+        background: transparent;
     }
 
-    input {
+	input {
         width: 100%; 
         padding: 8px;
-        font-size: 15px;
-        -webkit-appearance: none;
-        appearance: none;
+        font-size: 16px;
+        background: #22252a; 
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        
+        /* Hier ebenfalls anpassen */
+        color:white; 
     }
 
-    /* Mobile Anpassung für das Popup laut deiner Vorgabe */
     .modal-content {
-        width: 92%; /* Fast so breit wie der Bildschirm */
+        width: 94%;
         max-width: 480px;
         padding: 12px;
-        /* Ergibt ein ca. 2:1 Verhältnis (Breite doppelt so groß wie Höhe) */
         aspect-ratio: 2 / 1; 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    
-    .modal-body {
-        gap: 14px;
-    }
-
-    .modal-body img.modal-player-img {
-        width: 30%; /* Linker Bereich groß ausgefüllt */
-        height: auto;
-        aspect-ratio: 55 / 68;
-    }
-    
-    .modal-body .card-info {
-        flex: 1;
-        font-size: 12px;
-    }
-    .modal-body .player-name {
-        font-size: 14px;
     }
 }
 </style>
@@ -492,25 +649,29 @@ input:disabled {
 <div class="layout" id="mainLayout">
 
     <div class="side-content center id-desktop-left">
-        <img id="logo" class="team-logo">
-        <h2 id="name"></h2>
+        <div class="desktop-media-wrapper">
+            <img id="logo" class="team-logo" alt="Logo">
+            <img id="flag" class="nation-flag" alt="Flag">
+        </div>
+        <h2 id="name" style="margin: 10px 0 5px 0;"></h2>
         <div class="timer id-timer-desktop">02:00</div>
         
         <div class="btn-container-desktop">
             <a href="index.html" class="btn-leave">Exit</a>
-            <button id="btnFinishDesktop" class="btn-finish">Finish</button>
+            <button id="btnFinishDesktop" class="btn-finish">Give Up</button>
         </div>
     </div>
 
     <div class="header-mobile-wrap">
         <div class="mobile-left-content">
-            <img id="logoMobile" class="team-logo">
+            <img id="logoMobile" class="team-logo" alt="Logo">
+            <img id="flagMobile" class="nation-flag" alt="Flag">
             <div class="timer id-timer-mobile">02:00</div>
         </div>
 
         <div class="mobile-btn-wrap">
             <a href="index.html" class="btn-leave">Exit</a>
-            <button id="btnFinishMobile" class="btn-finish">Finish</button>
+            <button id="btnFinishMobile" class="btn-finish">Stop</button>
         </div>
 
         <div class="mobile-right-content">
@@ -519,7 +680,12 @@ input:disabled {
     </div>
 
     <div class="panel-pitch" id="pitchParent">
-        <div class="pitch" id="pitch"></div>
+        <div class="pitch" id="pitch">
+            <div class="pitch-center-line"></div>
+            <div class="pitch-center-circle"></div>
+            <div class="pitch-box-top"></div>
+            <div class="pitch-box-bottom"></div>
+        </div>
     </div>
 
     <div class="side-content desktop-only">
@@ -536,7 +702,7 @@ input:disabled {
         inputmode="search" 
         name="search"
         autocomplete="off" 
-        autorrect="off" 
+        autocorrect="off" 
         autocapitalize="off" 
         spellcheck="false" 
         placeholder="Player..."
@@ -544,15 +710,36 @@ input:disabled {
 </div>
 
 <div class="modal-overlay" id="playerModal" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-content" id="modalContainer" onclick="event.stopPropagation()">
         <span class="modal-close" onclick="closeModal()">&times;</span>
-        <div id="modalBody" class="modal-body">
-            </div>
+        <div id="modalBody" class="modal-body"></div>
     </div>
 </div>
 
 <script>
-/* ===================== DATA & LOAD ===================== */
+// ========================================================
+// KEYBOARD & VISUAL VIEWPORT HANDLER (NEU)
+// ========================================================
+function updateVisualViewport() {
+    if (window.visualViewport) {
+        // Berechnet die tatsächliche sichtbare Höhe in Pixeln
+        const vvHeight = window.visualViewport.height;
+        // Setzt diese dynamisch als CSS-Variable auf das HTML-Element
+        document.documentElement.style.setProperty('--visual-height', `${vvHeight}px`);
+        
+        // Automatischer Scroll-Fix für iOS, damit das Layout nicht wegrutscht
+        window.scrollTo(0, 0);
+    }
+}
+
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateVisualViewport);
+    window.visualViewport.addEventListener('scroll', updateVisualViewport);
+}
+// Einmalig beim Laden ausführen
+updateVisualViewport();
+
+
 const game = {
     team: null,
     teamDetails: null,
@@ -575,14 +762,36 @@ fetch("./data/worldcup_teams.json")
     game.teamDetails = team;
     game.players = team.players;
 
-    document.body.style.backgroundImage = `url('./data/${game.team.folder}/background.png')`;
+    const c1 = team.color_1 || "#1565c0"; 
+    const c2 = team.color_2 || "#ffffff";
+    const c3 = team.color_3 || "#ffffff";
+
+    document.documentElement.style.setProperty('--c1', c1); 
+    document.documentElement.style.setProperty('--c2', c2);
+    document.documentElement.style.setProperty('--c3', c3);
+
+    const bgUrl = `./data/${game.team.folder}/background.png`;
+    const imgTest = new Image();
+    imgTest.src = bgUrl;
+    imgTest.onload = () => {
+        document.documentElement.style.backgroundImage = `url('${bgUrl}')`;
+    };
+    imgTest.onerror = () => {
+        document.documentElement.style.background = c1;
+        document.documentElement.style.backgroundImage = 'none';
+    };
+
     document.getElementById("logo").src = game.team.flag;
     document.getElementById("logoMobile").src = game.team.flag;
+    
+    const flagUrl = `./data/${game.team.folder}/${game.team.folder}_flag.png`;
+    document.getElementById("flag").src = flagUrl;
+    document.getElementById("flagMobile").src = flagUrl;
+    
     document.getElementById("name").innerText = team.teamName;
 
     renderPitch(team);
     startTimer();
-    setupKeyboardFix();
     setupFinishButtons();
 });
 
@@ -592,89 +801,129 @@ const map = {
 };
 const order = ["ST","AM","CM","DM","CB","GK"];
 
-/* ===================== RENDERING ===================== */
 function renderPitch(team){
     const pitch = document.getElementById("pitch");
-    pitch.innerHTML = "";
+    
+    const rows = pitch.querySelectorAll(".pitch-row");
+    rows.forEach(r => r.remove());
     
     const c1 = team.color_1 || "#1565c0";
     const c2 = team.color_2 || "#ffffff";
     const c3 = team.color_3 || "#ffffff";
 
-    const isMobile = window.innerWidth <= 850;
-
     order.forEach(pos => {
         const row = document.createElement("div");
         row.className = "pitch-row";
 
-        if (isMobile) {
-            const leftZone = document.createElement("div"); leftZone.className = "mobile-zone-left";
-            const centerZone = document.createElement("div"); centerZone.className = "mobile-zone-center";
-            const rightZone = document.createElement("div"); rightZone.className = "mobile-zone-right";
-
-            if (pos === "AM") {
-                game.players.filter(p => map["LW"].includes((p.position||"").toUpperCase())).forEach(p => {
-                    leftZone.appendChild(createPlayerCircle(p, "LW", c1, c2, c3));
-                });
-            }
-            if (pos === "CB") {
-                game.players.filter(p => map["LB"].includes((p.position||"").toUpperCase())).forEach(p => {
-                    leftZone.appendChild(createPlayerCircle(p, "LB", c1, c2, c3));
-                });
-            }
-
-            game.players.filter(p => map[pos].includes((p.position||"").toUpperCase())).forEach(p => {
-                centerZone.appendChild(createPlayerCircle(p, pos, c1, c2, c3));
-            });
-
-            if (pos === "AM") {
-                game.players.filter(p => map["RW"].includes((p.position||"").toUpperCase())).forEach(p => {
-                    rightZone.appendChild(createPlayerCircle(p, "RW", c1, c2, c3));
-                });
-            }
-            if (pos === "CB") {
-                game.players.filter(p => map["RB"].includes((p.position||"").toUpperCase())).forEach(p => {
-                    rightZone.appendChild(createPlayerCircle(p, "RB", c1, c2, c3));
-                });
-            }
-
-            row.appendChild(leftZone);
-            row.appendChild(centerZone);
-            row.appendChild(rightZone);
-
-        } else {
-            const centerPlayers = game.players.filter(p => map[pos].includes((p.position||"").toUpperCase()));
-            const layout = distribute(centerPlayers.length);
-            layout.forEach((_, i) => {
-                const p = centerPlayers[i];
-                if(p) row.appendChild(createPlayerCircle(p, pos, c1, c2, c3));
-            });
-
-            if (pos === "AM") {
-                game.players.filter(p => map["LW"].includes((p.position||"").toUpperCase())).forEach((p, i) => {
-                    const el = createPlayerCircle(p, "LW", c1, c2, c3); el.classList.add("pos-outer");
-                    el.style.left = `${20 + i * 110}px`; row.appendChild(el);
-                });
-                game.players.filter(p => map["RW"].includes((p.position||"").toUpperCase())).forEach((p, i) => {
-                    const el = createPlayerCircle(p, "RW", c1, c2, c3); el.classList.add("pos-outer");
-                    el.style.right = `${20 + i * 110}px`; row.appendChild(el);
-                });
-            }
-            if (pos === "CB") {
-                game.players.filter(p => map["LB"].includes((p.position||"").toUpperCase())).forEach((p, i) => {
-                    const el = createPlayerCircle(p, "LB", c1, c2, c3); el.classList.add("pos-outer");
-                    el.style.left = `${20 + i * 110}px`; row.appendChild(el);
-                });
-                game.players.filter(p => map["RB"].includes((p.position||"").toUpperCase())).forEach((p, i) => {
-                    const el = createPlayerCircle(p, "RB", c1, c2, c3); el.classList.add("pos-outer");
-                    el.style.right = `${20 + i * 110}px`; row.appendChild(el);
-                });
-            }
+        const centerPlayers = game.players.filter(p => map[pos].includes((p.position||"").toUpperCase()));
+        
+        let leftPlayers = [];
+        let rightPlayers = [];
+        if (pos === "AM") {
+            leftPlayers = game.players.filter(p => map["LW"].includes((p.position||"").toUpperCase()));
+            rightPlayers = game.players.filter(p => map["RW"].includes((p.position||"").toUpperCase()));
+        } else if (pos === "CB") {
+            leftPlayers = game.players.filter(p => map["LB"].includes((p.position||"").toUpperCase()));
+            rightPlayers = game.players.filter(p => map["RB"].includes((p.position||"").toUpperCase()));
         }
+
+        const maxWings = Math.max(leftPlayers.length, rightPlayers.length);
+
+        if (leftPlayers.length > 0) {
+            const leftBlock = document.createElement("div");
+            leftBlock.className = "wing-block left-side";
+            buildWingLayout(leftBlock, leftPlayers, maxWings, "left", pos, centerPlayers.length, c1, c2, c3);
+            row.appendChild(leftBlock);
+        }
+
+        const centerBlock = document.createElement("div");
+        centerBlock.className = "center-block";
+        centerPlayers.forEach(p => {
+            centerBlock.appendChild(createPlayerCircle(p, pos, c1, c2, c3));
+        });
+        row.appendChild(centerBlock);
+
+        if (rightPlayers.length > 0) {
+            const rightBlock = document.createElement("div");
+            rightBlock.className = "wing-block right-side";
+            buildWingLayout(rightBlock, rightPlayers, maxWings, "right", pos, centerPlayers.length, c1, c2, c3);
+            row.appendChild(rightBlock);
+        }
+
         pitch.appendChild(row);
     });
+}
 
-    adjustMobileCircleSizes();
+function buildWingLayout(container, wingPlayers, maxWings, side, mainPos, centerCount, c1, c2, c3) {
+    const defaultText = mainPos === "AM" ? (side === "left" ? "LW" : "RW") : (side === "left" ? "LB" : "RB");
+
+    if (mainPos === "CB" && centerCount >= 5) {
+        if (wingPlayers.length === 1) {
+            const stack = document.createElement("div");
+            stack.className = "wing-stack";
+            stack.appendChild(createPlayerCircle(wingPlayers[0], defaultText, c1, c2, c3));
+            container.appendChild(stack);
+        } else if (wingPlayers.length === 2) {
+            const stack = document.createElement("div");
+            stack.className = "wing-stack";
+            stack.appendChild(createPlayerCircle(wingPlayers[0], defaultText, c1, c2, c3)); 
+            stack.appendChild(createPlayerCircle(wingPlayers[1], defaultText, c1, c2, c3)); 
+            container.appendChild(stack);
+        } else {
+            const stack = document.createElement("div");
+            stack.className = "wing-stack";
+            if(wingPlayers[0]) stack.appendChild(createPlayerCircle(wingPlayers[0], defaultText, c1, c2, c3)); 
+            if(wingPlayers[1]) stack.appendChild(createPlayerCircle(wingPlayers[1], defaultText, c1, c2, c3)); 
+            if(wingPlayers[2]) stack.appendChild(createPlayerCircle(wingPlayers[2], defaultText, c1, c2, c3)); 
+            container.appendChild(stack);
+            
+            for(let i = 3; i < wingPlayers.length; i++) {
+                if (side === "left") {
+                    container.appendChild(createPlayerCircle(wingPlayers[i], defaultText, c1, c2, c3));
+                } else {
+                    container.insertBefore(createPlayerCircle(wingPlayers[i], defaultText, c1, c2, c3), stack);
+                }
+            }
+        }
+        return;
+    }
+
+    if (maxWings >= 3) {
+        const stack = document.createElement("div");
+        stack.className = "wing-stack";
+        
+        if (side === "left") {
+            if(wingPlayers[0]) stack.appendChild(createPlayerCircle(wingPlayers[0], defaultText, c1, c2, c3)); 
+            if(wingPlayers[1]) stack.appendChild(createPlayerCircle(wingPlayers[1], defaultText, c1, c2, c3)); 
+            container.appendChild(stack);
+            if(wingPlayers[2]) container.appendChild(createPlayerCircle(wingPlayers[2], defaultText, c1, c2, c3)); 
+            
+            for(let i = 3; i < wingPlayers.length; i++) {
+                container.appendChild(createPlayerCircle(wingPlayers[i], defaultText, c1, c2, c3));
+            }
+        } else {
+            if(wingPlayers[2]) container.appendChild(createPlayerCircle(wingPlayers[2], defaultText, c1, c2, c3)); 
+            if(wingPlayers[0]) stack.appendChild(createPlayerCircle(wingPlayers[0], defaultText, c1, c2, c3)); 
+            if(wingPlayers[1]) stack.appendChild(createPlayerCircle(wingPlayers[1], defaultText, c1, c2, c3)); 
+            container.appendChild(stack);
+            
+            for(let i = 3; i < wingPlayers.length; i++) {
+                container.insertBefore(createPlayerCircle(wingPlayers[i], defaultText, c1, c2, c3), stack);
+            }
+        }
+    } else {
+        if (wingPlayers.length === 1) {
+            container.appendChild(createPlayerCircle(wingPlayers[0], defaultText, c1, c2, c3));
+        } else {
+            if (side === "left") {
+                container.appendChild(createPlayerCircle(wingPlayers[0], defaultText, c1, c2, c3)); 
+                container.appendChild(createPlayerCircle(wingPlayers[1], defaultText, c1, c2, c3)); 
+            } else {
+                container.appendChild(createPlayerCircle(wingPlayers[1], defaultText, c1, c2, c3)); 
+                container.appendChild(createPlayerCircle(wingPlayers[0], defaultText, c1, c2, c3)); 
+            }
+        }
+    }
 }
 
 function createPlayerCircle(p, defaultText, c1, c2, c3) {
@@ -684,14 +933,13 @@ function createPlayerCircle(p, defaultText, c1, c2, c3) {
     el.style.setProperty("--c2", c2);
     el.style.setProperty("--c3", c3);
     
+    if(p.jersey_number) el.dataset.jersey = p.jersey_number;
+    
     if (game.finished || p.guessed) {
-        el.innerHTML = `<img src="./data/${game.team.folder}/players/${p.jersey_number}.png"><span></span>`;
-        
+        el.innerHTML = `<img src="./data/${game.team.folder}/players/${p.jersey_number}.png" alt=""><span></span>`;
         if (game.finished && !p.guessed) {
             el.classList.add("revealed-failed");
         }
-        
-        // NEU: Wenn Spiel vorbei ist, Klick-Event für Popup hinzufügen
         if (game.finished) {
             el.classList.add("clickable");
             el.addEventListener("click", () => openPlayerModal(p));
@@ -702,45 +950,53 @@ function createPlayerCircle(p, defaultText, c1, c2, c3) {
     return el;
 }
 
-function distribute(n){
-    if(n<=1) return [0]; if(n===2) return [-1,1]; if(n===3) return [-1,0,1];
-    if(n===4) return [-2,-1,1,2]; if(n===5) return [-2,-1,0,1,2];
-    let arr=[]; for(let i=0; i<n; i++) arr.push(i); return arr;
-}
-
-function adjustMobileCircleSizes() {
-    if (window.innerWidth > 850) return;
-    
-    const pitchElement = document.getElementById("pitch");
-    if (!pitchElement) return;
-    const pitchHeight = pitchElement.getBoundingClientRect().height;
-    
-    let idealSize = Math.floor((pitchHeight / 6) - 8);
-    idealSize = Math.max(34, Math.min(40, idealSize)); 
-    
-    const fontSize = Math.max(9, Math.floor(idealSize * 0.24));
-
-    const circles = document.querySelectorAll(".circle");
-    circles.forEach(c => {
-        c.style.setProperty("--m-size", `${idealSize}px`);
-        c.style.setProperty("--m-fs", `${fontSize}px`);
-    });
-}
-
-/* ===================== ALTERSBERECHNUNG ===================== */
 function calculateAge(birthdateString) {
     if (!birthdateString) return "N/A";
+    const parts = birthdateString.split('.');
+    if (parts.length !== 3) return "N/A";
+    
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    
+    const birthDate = new Date(year, month, day);
+    if (isNaN(birthDate.getTime())) return "N/A";
+
     const today = new Date();
-    const birthDate = new Date(birthdateString);
     let age = today.getFullYear() - birthDate.getFullYear();
     const m = today.getMonth() - birthDate.getMonth();
+    
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
     }
     return age;
 }
 
-/* ===================== INPUT & UPDATES ===================== */
+function startTimer() {
+    const tDesktop = document.querySelector(".id-timer-desktop");
+    const tMobile = document.querySelector(".id-timer-mobile");
+    
+    const interval = setInterval(() => {
+        if (game.finished) {
+            clearInterval(interval);
+            return;
+        }
+        game.time--;
+        
+        let m = Math.floor(game.time / 60);
+        let s = game.time % 60;
+        let str = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        
+        if(tDesktop) tDesktop.innerText = str;
+        if(tMobile) tMobile.innerText = str;
+        
+        if (game.time <= 0) {
+            clearInterval(interval);
+            endGame();
+        }
+    }, 1000);
+}
+
 document.getElementById("input").addEventListener("input",(e)=>{
     if(game.finished) return; 
     
@@ -756,12 +1012,17 @@ document.getElementById("input").addEventListener("input",(e)=>{
     if(p){
         p.guessed = true;
         e.target.value = "";
-        renderPitch(game.teamDetails);
+        
+        const targetCircle = document.querySelector(`.circle[data-jersey="${p.jersey_number}"]`);
+        if(targetCircle) {
+            targetCircle.innerHTML = `<img src="./data/${game.team.folder}/players/${p.jersey_number}.png" alt=""><span></span>`;
+        }
+        
         updateHistories(p);
         
         const allDone = game.players.every(pl => pl.guessed);
         if(allDone) {
-            endGame("Congratulations! You found everyone!");
+            endGame();
         }
     }
 });
@@ -782,7 +1043,7 @@ function updateHistories(p){
             const d = document.createElement("div");
             d.className = "card";
             d.innerHTML = `
-                <img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png">
+                <img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png" alt="">
                 <div class="card-info">
                     <div class="player-name"><b>${fullName}</b></div>
                     <div class="meta-row">
@@ -791,7 +1052,7 @@ function updateHistories(p){
                         <span>${x.height || "—"}</span>
                     </div>
                     <div class="club-row">
-                        <img class="club-icon" src="./data/${game.team.folder}/clubs/${clubClean}.png" onerror="this.style.display='none'">
+                        <img class="club-icon" src="./data/${game.team.folder}/clubs/${clubClean}.png" onerror="this.style.display='none'" alt="">
                         <span>${x.club || "No Club"}</span>
                     </div>
                 </div>
@@ -806,28 +1067,24 @@ function updateHistories(p){
         game.history.forEach(x => {
             const d = document.createElement("div");
             d.className = "card";
-            d.innerHTML = `<img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png">`;
+            d.innerHTML = `<img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png" alt="">`;
             hMobile.appendChild(d);
         });
     }
 }
 
-/* ===================== FINISH BUTTON MECHANIC ===================== */
 function setupFinishButtons() {
     const handler = () => {
         if(game.finished) return;
-        game.time = 0; // Setzt Timer auf Null
-        endGame("Game stopped! Missing players have been revealed.");
+        game.time = 0;
+        endGame();
     };
-    
     document.getElementById("btnFinishDesktop").addEventListener("click", handler);
     document.getElementById("btnFinishMobile").addEventListener("click", handler);
 }
 
-/* ===================== GAME OVER HANDLING ===================== */
-function endGame(message) {
+function endGame() {
     game.finished = true;
-    
     const inputField = document.getElementById("input");
     if(inputField) {
         inputField.disabled = true;
@@ -835,32 +1092,32 @@ function endGame(message) {
         inputField.value = "";
         inputField.blur();
     }
-    
-    // Finish-Buttons ausblenden nach Spielende
     document.getElementById("btnFinishDesktop").style.display = "none";
     document.getElementById("btnFinishMobile").style.display = "none";
-    
     if(game.teamDetails) {
         renderPitch(game.teamDetails);
     }
-    
-    setTimeout(() => {
-        alert(message);
-    }, 100);
 }
 
-/* ===================== MODAL/POPUP FUNCTIONS ===================== */
 function openPlayerModal(p) {
     const age = calculateAge(p.birthdate);
     const firstName = p.first_name ? `${p.first_name} ` : "";
     const fullName = `${firstName}${p.last_name}`;
     const clubClean = (p.club || "").trim();
 
+    const c1 = game.teamDetails.color_1 || "#ff3b30";
+    const c3 = game.teamDetails.color_3 || "#1c1e24";
+
+    const modalContainer = document.getElementById("modalContainer");
+    modalContainer.style.setProperty("--popup-border", c1);
+    modalContainer.style.setProperty("--popup-bg", c3);
+    modalContainer.style.setProperty("--popup-text", c1);
+
     const body = document.getElementById("modalBody");
     body.innerHTML = `
-        <img class="modal-player-img" src="./data/${game.team.folder}/players/${p.jersey_number}.png">
+        <img class="modal-player-img" src="./data/${game.team.folder}/players/${p.jersey_number}.png" alt="">
         <div class="card-info">
-            <div class="player-name"><b>${fullName}</b></div>
+            <div class="player-name">${fullName}</div>
             <div class="meta-row" style="margin-bottom: 6px;">
                 <span>#${p.jersey_number || "N/A"}</span> • 
                 <span>${p.position || "N/A"}</span> • 
@@ -868,61 +1125,16 @@ function openPlayerModal(p) {
                 <span>${p.height || "—"}</span>
             </div>
             <div class="club-row">
-                <img class="club-icon" src="./data/${game.team.folder}/clubs/${clubClean}.png" onerror="this.style.display='none'">
+                <img class="club-icon" src="./data/${game.team.folder}/clubs/${clubClean}.png" onerror="this.style.display='none'" alt="">
                 <span>${p.club || "No Club"}</span>
             </div>
         </div>
     `;
-    
     document.getElementById("playerModal").classList.add("active");
 }
 
 function closeModal() {
     document.getElementById("playerModal").classList.remove("active");
-}
-
-/* ===================== THE IOS KEYBOARD FIX ===================== */
-function setupKeyboardFix() {
-    if (!window.visualViewport) return;
-
-    const mainLayout = document.getElementById("mainLayout");
-
-    window.visualViewport.addEventListener("resize", () => {
-        const vpHeight = window.visualViewport.height;
-
-        if (window.innerWidth <= 850) {
-            mainLayout.style.height = `${vpHeight - 46}px`;
-            window.scrollTo(0, 0);
-            adjustMobileCircleSizes();
-        } else {
-            mainLayout.style.height = "calc(100vh - 80px)";
-        }
-    });
-}
-
-window.addEventListener("resize", () => {
-    if(game.teamDetails) renderPitch(game.teamDetails);
-});
-
-function startTimer(){
-    const td = document.querySelector(".id-timer-desktop");
-    const tm = document.querySelector(".id-timer-mobile");
-    const interval = setInterval(()=>{
-        if(game.finished) {
-            clearInterval(interval);
-            return;
-        }
-        game.time--;
-        let m = String(Math.floor(game.time/60)).padStart(2,"0");
-        let s = String(game.time%60).padStart(2,"0");
-        if(td) td.innerText = `${m}:${s}`;
-        if(tm) tm.innerText = `${m}:${s}`;
-        
-        if(game.time<=0){ 
-            clearInterval(interval);
-            endGame("Time up! Missing players have been revealed."); 
-        }
-    },1000);
 }
 </script>
 </body>
