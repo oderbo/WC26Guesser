@@ -997,31 +997,46 @@ function startTimer() {
     }, 1000);
 }
 
-document.getElementById("input").addEventListener("input",(e)=>{
-    if(game.finished) return; 
+document.getElementById("input").addEventListener("input", (e) => {
+    if (game.finished) return; 
     
     const v = e.target.value.toLowerCase().trim();
-    if(!v) return;
-    const p = game.players.find(pl=>{
-        if(pl.guessed) return false;
+    if (!v) return;
+    
+    // 1. Spieler finden basierend auf der neuen Logik
+    const p = game.players.find(pl => {
+        if (pl.guessed) return false;
+        
         const firstName = (pl.first_name || "").toLowerCase().trim();
         const lastName = (pl.last_name || "").toLowerCase().trim();
-        const full = lastName ? `${firstName} ${lastName}` : firstName;
-        return v === full || v === firstName || v === lastName || (pl.aliases || []).map(a=>a.toLowerCase().trim()).includes(v);
+        
+        // Prüfe auf vollen Namen, Alias oder Nachnamen
+        if (v === `${firstName} ${lastName}` || (pl.aliases || []).map(a=>a.toLowerCase().trim()).includes(v) || (lastName && v === lastName)) {
+            return true;
+        }
+        // Prüfe auf Vornamen NUR wenn kein Nachname existiert
+        if (!lastName && v === firstName) {
+            return true;
+        }
+        return false;
     });
-    if(p){
+
+    if (p) {
+        // 2. Spieler als erraten markieren
         p.guessed = true;
         e.target.value = "";
         
+        // 3. UI: Kreis auf dem Spielfeld aktualisieren
         const targetCircle = document.querySelector(`.circle[data-jersey="${p.jersey_number}"]`);
         if(targetCircle) {
             targetCircle.innerHTML = `<img src="./data/${game.team.folder}/players/${p.jersey_number}.png" alt=""><span></span>`;
         }
         
+        // 4. UI: Historie aktualisieren (Dies ist wichtig, damit die Historie rechts erscheint)
         updateHistories(p);
         
-        const allDone = game.players.every(pl => pl.guessed);
-        if(allDone) {
+        // 5. Spiel beenden wenn alle erraten
+        if(game.players.every(pl => pl.guessed)) {
             endGame();
         }
     }
