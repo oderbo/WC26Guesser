@@ -198,8 +198,63 @@ body {
 
 .btn-random-nation { background-image: url('assets/country_random_button.jpg'); }
 .btn-pick-nation { background-image: url('assets/country_pick_button.jpg'); }
-.btn-player-guess { background-image: url('assets/player_guess_button.jpg'); }
-.btn-soon { background-image: url('assets/soon_button.jpg'); }
+
+/* HIER NEU: Relative Positionierung, damit das Badge darin fixiert werden kann */
+.btn-player-random { 
+    background-image: url('assets/player_random_button.png'); 
+    position: relative;
+}
+.btn-multiplayer { background-image: url('assets/multiplayer.png'); }
+
+/* --- TOP 10 BADGE STYLE (AKTUALISIERT) --- */
+.top10-badge {
+    position: absolute;
+    top: 0;    /* Direkt an der Oberkante */
+    right: 0;  /* Direkt an der Rechten Kante */
+    
+    background-color: #ffffff; /* Weißer Hintergrund */
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    
+    /* Übernimmt exakt die 14px Abrundung des Hauptbuttons für oben rechts */
+    border-top-right-radius: inherit; 
+    border-bottom-left-radius: 8px; /* Schicke Abrundung nach innen */
+    
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    box-shadow: -2px 2px 6px rgba(0,0,0,0.15);
+    transition: background-color 0.2s ease;
+}
+
+.top10-badge:hover {
+    background-color: #f0f2ff; /* Ganz leichtes bläuliches Grau beim Drüberfahren */
+}
+
+.top10-badge span {
+    font-size: clamp(8px, 1.2vw, 10px);
+    font-weight: bold;
+    color: #3f57f5; /* Blaue Schriftfarbe passend zum Theme */
+    letter-spacing: 0.5px;
+}
+
+/* Der kleine LED-Punkt unter dem Text */
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #cccccc; /* Standard: Aus (neutrales Grau auf weißem Grund) */
+    transition: all 0.3s ease;
+}
+
+/* Wenn der Filter aktiv ist (Grün leuchtend mit Glow-Effekt) */
+.top10-badge.active .status-dot {
+    background-color: #00cc44;
+    box-shadow: 0 0 6px #00cc44, 0 0 12px #00cc44;
+}
 </style>
 </head>
 <body>
@@ -215,11 +270,26 @@ body {
     
     <div class="center-space"></div>
     
-    <button class="image-btn btn-player-guess" disabled></button>
-    <button class="image-btn btn-soon" disabled></button>
+    <button class="image-btn btn-player-random" onclick="openRandomPlayer()">
+        <div class="top10-badge" id="top10Badge" onclick="toggleTop10(event)">
+            <span>TOP 10</span>
+            <div class="status-dot"></div>
+        </div>
+    </button>
+    
+    <button class="image-btn btn-multiplayer" onclick="openMultiplayer()"></button>
 </div>
 
 <script>
+// Beim Laden der Seite den gespeicherten Zustand abrufen
+document.addEventListener("DOMContentLoaded", () => {
+    const isTop10Active = localStorage.getItem("random_player_top10") === "true";
+    const badge = document.getElementById("top10Badge");
+    if (isTop10Active) {
+        badge.classList.add("active");
+    }
+});
+
 function startRandom() {
     fetch("./data/worldcup_teams.json")
         .then(r => r.json())
@@ -232,6 +302,25 @@ function startRandom() {
 
 function openSelect() {
     window.location.href = "select.html";
+}
+
+function openRandomPlayer() {
+    window.location.href = "game_random_player.html";
+}
+
+function openMultiplayer() {
+    window.location.href = "select_multiplayer.html";
+}
+
+/* HIER NEU: Schaltet den Filter um, speichert ihn und verhindert das Auslösen des Hauptbuttons */
+function toggleTop10(event) {
+    event.stopPropagation(); // Verhindert, dass openRandomPlayer() aufgerufen wird!
+    
+    const badge = document.getElementById("top10Badge");
+    const isActive = badge.classList.toggle("active");
+    
+    // Zustand dauerhaft im Browser speichern
+    localStorage.setItem("random_player_top10", isActive);
 }
 </script>
 </body>

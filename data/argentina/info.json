@@ -146,8 +146,8 @@
     },
     {
       "nation": "Argentina",
-      "first_name": "Alexis Mac",
-      "last_name": "Allister",
+      "first_name": "Alexis",
+      "last_name": "Mac Allister",
       "jersey_number": 20,
       "birthdate": "24.12.1998",
       "club": "Liverpool FC",
@@ -179,8 +179,8 @@
     },
     {
       "nation": "Argentina",
-      "first_name": "Rodrigo De",
-      "last_name": "Paul",
+      "first_name": "Rodrigo",
+      "last_name": "de Paul",
       "jersey_number": 7,
       "birthdate": "24.05.1994",
       "club": "Inter Miami CF",
@@ -201,8 +201,8 @@
     },
     {
       "nation": "Argentina",
-      "first_name": "Giovani Lo",
-      "last_name": "Celso",
+      "first_name": "Giovani",
+      "last_name": "lo Celso",
       "jersey_number": 11,
       "birthdate": "09.04.1996",
       "club": "Real Betis Balompié",
