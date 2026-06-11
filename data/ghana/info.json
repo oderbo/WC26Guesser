@@ -46,7 +46,7 @@
       "jersey_number": 21,
       "birthdate": "04.06.2004",
       "club": "OGC Nice",
-      "position": "CB",
+      "position": "RB",
       "height": "1,85m",
       "aliases": []
     },
@@ -211,7 +211,7 @@
       "jersey_number": 22,
       "birthdate": "15.02.2002",
       "club": "Atalanta BC",
-      "position": "LW",
+      "position": "AM",
       "height": "1,74m",
       "aliases": []
     },
@@ -266,7 +266,7 @@
       "jersey_number": 19,
       "birthdate": "15.06.1994",
       "club": "Athletic Bilbao",
-      "position": "RW",
+      "position": "LW",
       "height": "1,86m",
       "aliases": []
     },

@@ -46,7 +46,7 @@
       "jersey_number": 4,
       "birthdate": "23.01.2002",
       "club": "Manchester City",
-      "position": "CB",
+      "position": "LB",
       "height": "1,85m",
       "aliases": []
     },
@@ -208,7 +208,7 @@
       "jersey_number": 16,
       "birthdate": "16.02.2003",
       "club": "Como 1907",
-      "position": "AM",
+      "position": "LW",
       "height": "1,72m",
       "aliases": []
     },

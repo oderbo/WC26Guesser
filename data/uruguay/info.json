@@ -94,7 +94,7 @@
       "jersey_number": 20,
       "birthdate": "15.02.2000",
       "club": "Sporting CP",
-      "position": "LB",
+      "position": "LW",
       "height": "1,76m",
       "aliases": [
         "Araujo"
@@ -107,7 +107,7 @@
       "jersey_number": 16,
       "birthdate": "31.10.1997",
       "club": "SSC Napoli",
-      "position": "LB",
+      "position": "CB",
       "height": "1,74m",
       "aliases": []
     },
@@ -243,7 +243,7 @@
       "jersey_number": 14,
       "birthdate": "01.10.1998",
       "club": "Fluminense Football Club",
-      "position": "LW",
+      "position": "RW",
       "height": "1,76m",
       "aliases": []
     },

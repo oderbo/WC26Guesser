@@ -16,7 +16,7 @@
       "position": "GK",
       "height": "1,91m",
       "aliases": [
-        "Cakır"
+        "Cakir"
       ]
     },
     {
@@ -28,7 +28,9 @@
       "club": "Manchester United",
       "position": "GK",
       "height": "1,98m",
-      "aliases": []
+      "aliases": [
+	    "Bayindir"
+	  ]
     },
     {
       "nation": "Turkiye",
@@ -74,7 +76,9 @@
       "club": "Galatasaray",
       "position": "CB",
       "height": "1,85m",
-      "aliases": []
+      "aliases": [
+        "Bardakci"
+      ]
     },
     {
       "nation": "Turkiye",
@@ -110,7 +114,7 @@
       "position": "LB",
       "height": "1,74m",
       "aliases": [
-        "Kadıoglu"
+        "Kadioglu"
       ]
     },
     {
@@ -122,7 +126,9 @@
       "club": "Galatasaray",
       "position": "LB",
       "height": "1,81m",
-      "aliases": []
+      "aliases": [
+        "Elmali"
+      ]
     },
     {
       "nation": "Turkiye",
@@ -246,7 +252,9 @@
       "club": "Juventus FC",
       "position": "LW",
       "height": "1,87m",
-      "aliases": []
+      "aliases": [
+        "Yildiz"
+      ]
     },
     {
       "nation": "Turkiye",
@@ -257,7 +265,9 @@
       "club": "Galatasaray",
       "position": "LW",
       "height": "1,86m",
-      "aliases": []
+      "aliases": [
+        "Yilmaz"
+      ]
     },
     {
       "nation": "Turkiye",
@@ -294,7 +304,9 @@
       "club": "Fenerbahce",
       "position": "RW",
       "height": "1,83m",
-      "aliases": []
+      "aliases": [
+        "Aydin"
+      ]
     },
     {
       "nation": "Turkiye",
