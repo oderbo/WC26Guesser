@@ -54,6 +54,17 @@
     },
     {
       "nation": "Argentina",
+      "first_name": "Marcos",
+      "last_name": "Senesi",
+      "jersey_number": 2,
+      "birthdate": "10.05.1997",
+      "club": "Tottenham Hotspur",
+      "position": "CB",
+      "height": "1,84m",
+      "aliases": []
+    },
+    {
+      "nation": "Argentina",
       "first_name": "Lisandro",
       "last_name": "Martínez",
       "jersey_number": 6,

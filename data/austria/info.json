@@ -162,6 +162,17 @@
     },
     {
       "nation": "Austria",
+      "first_name": "Dejan",
+      "last_name": "Ljubicic",
+      "jersey_number": 19,
+      "birthdate": "08.10.1997",
+      "club": "FC Schalke 04",
+      "position": "DM",
+      "height": "1,87m",
+      "aliases": []
+    },
+    {
+      "nation": "Austria",
       "first_name": "Paul",
       "last_name": "Wanner",
       "jersey_number": 24,
