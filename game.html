@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -59,7 +61,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* HIER GEÄNDERT: color_3 (c3) wird zu 30% mit einem dunklen Transparenz-Hintergrund gemischt */
     background: color-mix(in srgb, var(--c3) 30%, rgba(15, 17, 21, 0.85));
     border: 2px solid var(--c2, #fff);
     outline: 2px solid var(--c3, #fff);
@@ -97,6 +98,57 @@ body {
     padding: 8px;
     border-radius: 10px;
     display: inline-block;
+}
+
+/* --- DYNAMISCHER ENGINE-SCORE-KREIS --- */
+.score-circle-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Desktop-Sizing im linken Panel */
+.id-desktop-left .score-circle-wrapper {
+    margin: 20px auto 0 auto;
+    width: 90px;
+    height: 90px;
+}
+
+/* Mobile-Sizing: Exakt 38px hoch für den 40px Header (1px Rand oben/unten) */
+.header-mobile-wrap .score-circle-wrapper {
+    width: 38px;
+    height: 38px;
+    margin-left: auto;
+    margin-right: 4px;
+}
+
+.score-circle-svg {
+    transform: rotate(-90deg); /* Dreht Startpunkt auf 12 Uhr (0 Uhr) */
+    width: 100%;
+    height: 100%;
+}
+
+.score-circle-bg {
+    transition: fill 0.3s ease;
+}
+
+.score-circle-text {
+    position: absolute;
+    font-weight: bold;
+    font-size: 13px;
+    text-shadow: none;
+}
+.id-desktop-left .score-circle-text {
+    font-size: 24px;
+}
+
+/* Ring-Glow Effekte */
+.ring-current {
+    transition: stroke-dashoffset 0.35s ease;
+}
+.ring-current-glow {
+    filter: drop-shadow(0px 0px 3px #00ff66);
 }
 
 .card {
@@ -352,9 +404,24 @@ input {
     border: 2px solid var(--c2, #fff);
     outline: 2px solid var(--c3, #fff);
     outline-offset: -4px;
+    transition: all 0.3s ease;
 }
 
-input:disabled {
+/* Klassen für das dynamische Game-Over Feedback */
+input.game-over-output {
+    background: rgba(15, 17, 21, 0.9) !important;
+    color: #ffffff !important;
+    font-weight: bold;
+    width: 60%;
+}
+input.glow-green {
+    border-color: #00ff66 !important;
+    outline-color: #00ff66 !important;
+    box-shadow: 0 0 20px #00ff66, inset 0 0 10px #00ff66;
+    animation: none;
+}
+
+input:disabled:not(.game-over-output) {
     background: #22252a;
     color: #555;
     cursor: not-allowed;
@@ -505,7 +572,7 @@ input:disabled {
         height: 40px; 
         align-items: center;
         justify-content: flex-start; 
-        padding: 0 8px;
+        padding: 0 4px;
         flex-shrink: 0;
         background: rgba(15, 17, 21, 0.85);
         margin-bottom: 4px; 
@@ -518,7 +585,7 @@ input:disabled {
     .mobile-left-content {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 4px;
         height: 100%;
     }
     
@@ -546,7 +613,7 @@ input:disabled {
         display: flex;
         gap: 4px;
         align-items: center;
-        margin-left: 6px;
+        margin-left: 4px;
     }
 
     .btn-leave, .btn-finish {
@@ -561,16 +628,15 @@ input:disabled {
         align-items: center;
         justify-content: flex-end;
         margin-left: auto; 
+        height: 100%;
     }
     
-    /* HIER GEÄNDERT: Abstand auf 2px, zentrierte Ausrichtung für perfekten 1px Rand */
     #historyMobile { 
         display: flex; 
         gap: 2px; 
         align-items: center; 
     }
     
-    /* HIER GEÄNDERT: Position auf relative, damit das Wappen absolut darauf ausgerichtet werden kann */
     #historyMobile .card { 
         position: relative;
         margin-bottom: 0; 
@@ -580,27 +646,25 @@ input:disabled {
         box-shadow: none; 
     }
     
-    /* HIER GEÄNDERT: Exakt 36px Höhe für 1px Platz nach oben und unten im 38px Container */
     #historyMobile .card img.player-img { 
         height: 36px; 
         width: 26px; 
         object-fit: cover; 
         border: 1px solid rgba(255,255,255,0.3); 
         border-radius: 4px;
-        display: block; /* Verhindert winzige Phantom-Abstände im Container */
+        display: block; 
     }
 
-    /* NEU: Vereinswappen Badge für Mobile */
     .mobile-club-badge {
         position: absolute;
         right: 0;
         bottom: 0;
-        transform: translateX(50%); /* Mittig zur rechten Kante des Spielerbildes */
-        height: 12px; /* Exakt 1/3 der Bild-Höhe (36px) */
+        transform: translateX(50%); 
+        height: 12px; 
         width: 12px;
         object-fit: contain;
         z-index: 5;
-        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); /* Kleiner Schatten zur besseren Lesbarkeit */
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); 
     }
 
     .panel-pitch {
@@ -661,6 +725,12 @@ input:disabled {
         color:white; 
     }
 
+    input.game-over-output {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+    }
+
     .modal-content {
         width: 94%;
         max-width: 480px;
@@ -683,9 +753,11 @@ input:disabled {
         <h2 id="name" style="margin: 10px 0 5px 0;"></h2>
         <div class="timer id-timer-desktop">03:00</div>
         
+        <!-- Engine-Score-Kreis Desktop -->
+        <div class="score-circle-wrapper" id="scoreContainerDesktop"></div>
+        
         <div class="btn-container-desktop">
-            <a href="index.html" class="btn-leave">Exit</a>
-            <!-- HIER GEÄNDERT: Button heißt jetzt Stop -->
+            <a href="select.html" class="btn-leave">Exit</a>
             <button id="btnFinishDesktop" class="btn-finish">Stop</button>
         </div>
     </div>
@@ -698,9 +770,12 @@ input:disabled {
         </div>
 
         <div class="mobile-btn-wrap">
-            <a href="index.html" class="btn-leave">Exit</a>
+            <a href="select.html" class="btn-leave">Exit</a>
             <button id="btnFinishMobile" class="btn-finish">Stop</button>
         </div>
+
+        <!-- Engine-Score-Kreis Mobile (rutscht per margin-left: auto ganz nach rechts vor die Kärtchen) -->
+        <div class="score-circle-wrapper" id="scoreContainerMobile"></div>
 
         <div class="mobile-right-content">
             <div id="historyMobile"></div>
@@ -744,10 +819,25 @@ input:disabled {
     </div>
 </div>
 
+<!-- FIREBASE INTEGRATION -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <script>
-// ========================================================
-// KEYBOARD & VISUAL VIEWPORT HANDLER
-// ========================================================
+// Firebase Konfiguration
+const firebaseConfig = {
+  apiKey: "AIzaSyD2KXF4jwbym0ghwMrSPFCiD-pgajGIopE",
+  authDomain: "wc26guesser-db.firebaseapp.com",
+  projectId: "wc26guesser-db",
+  storageBucket: "wc26guesser-db.firebasestorage.app",
+  messagingSenderId: "396925110064",
+  appId: "1:396925110064:web:18d8f40a30e2f0d63deaf5"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 function updateVisualViewport() {
     if (window.visualViewport) {
         const vvHeight = window.visualViewport.height;
@@ -770,54 +860,123 @@ const game = {
     players: [],
     history: [],
     time: 180,
-    finished: false
+    finished: false,
+    currentScore: 0,
+    highscore: 0
 };
 
 const teamKey = new URLSearchParams(location.search).get("team") || "spain";
 
-fetch("./data/worldcup_teams.json")
-.then(r=>r.json())
-.then(d=>{
-    game.team = d.teams[teamKey];
-    return fetch(`./data/${game.team.folder}/info.json`);
-})
-.then(r=>r.json())
-.then(team=>{
-    game.teamDetails = team;
-    game.players = team.players;
-
-    const c1 = team.color_1 || "#1565c0"; 
-    const c2 = team.color_2 || "#ffffff";
-    const c3 = team.color_3 || "#ffffff";
-
-    document.documentElement.style.setProperty('--c1', c1); 
-    document.documentElement.style.setProperty('--c2', c2);
-    document.documentElement.style.setProperty('--c3', c3);
-
-    const bgUrl = `./data/${game.team.folder}/background.png`;
-    const imgTest = new Image();
-    imgTest.src = bgUrl;
-    imgTest.onload = () => {
-        document.documentElement.style.backgroundImage = `url('${bgUrl}')`;
-    };
-    imgTest.onerror = () => {
-        document.documentElement.style.background = c1;
-        document.documentElement.style.backgroundImage = 'none';
-    };
-
-    document.getElementById("logo").src = game.team.flag;
-    document.getElementById("logoMobile").src = game.team.flag;
-    
-    const flagUrl = `./data/${game.team.folder}/${game.team.folder}_flag.png`;
-    document.getElementById("flag").src = flagUrl;
-    document.getElementById("flagMobile").src = flagUrl;
-    
-    document.getElementById("name").innerText = team.teamName;
-
-    renderPitch(team);
-    startTimer();
-    setupFinishButtons();
+// Firebase Auth Tracker, um Highscore synchron abzufragen
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        db.collection("users").doc(user.uid).collection("highscores").doc(teamKey).get()
+            .then((doc) => {
+                if (doc.exists) {
+                    game.highscore = doc.data().score || 0;
+                }
+                initGameEngine();
+            })
+            .catch((err) => {
+                console.error("Fehler beim Highscore-Laden:", err);
+                initGameEngine();
+            });
+    } else {
+        initGameEngine();
+    }
 });
+
+function initGameEngine() {
+    fetch("./data/worldcup_teams.json")
+    .then(r=>r.json())
+    .then(d=>{
+        game.team = d.teams[teamKey];
+        return fetch(`./data/${game.team.folder}/info.json`);
+    })
+    .then(r=>r.json())
+    .then(team=>{
+        game.teamDetails = team;
+        game.players = team.players;
+
+        const c1 = team.color_1 || "#1565c0"; 
+        const c2 = team.color_2 || "#ffffff";
+        const c3 = team.color_3 || "#ffffff";
+
+        document.documentElement.style.setProperty('--c1', c1); 
+        document.documentElement.style.setProperty('--c2', c2);
+        document.documentElement.style.setProperty('--c3', c3);
+
+        const bgUrl = `./data/${game.team.folder}/background.png`;
+        const imgTest = new Image();
+        imgTest.src = bgUrl;
+        imgTest.onload = () => {
+            document.documentElement.style.backgroundImage = `url('${bgUrl}')`;
+        };
+        imgTest.onerror = () => {
+            document.documentElement.style.background = c1;
+            document.documentElement.style.backgroundImage = 'none';
+        };
+
+        document.getElementById("logo").src = game.team.flag;
+        document.getElementById("logoMobile").src = game.team.flag;
+        
+        const flagUrl = `./data/${game.team.folder}/${game.team.folder}_flag.png`;
+        document.getElementById("flag").src = flagUrl;
+        document.getElementById("flagMobile").src = flagUrl;
+        
+        document.getElementById("name").innerText = team.teamName;
+
+        // Erstelle SVG-Kreise für Desktop und Mobile im DOM
+        buildScoreSVGElements(c1, c2);
+        updateScoreVisuals();
+
+        renderPitch(team);
+        startTimer();
+        setupFinishButtons();
+    });
+}
+
+// Erstellt die mathematischen SVGs dynamisch mit korrekten Farb-Zuweisungen
+function buildScoreSVGElements(color1, color2) {
+    const totalCircumference = 2 * Math.PI * 15; // Radius 15 -> Umfang ~94.24
+
+    const svgHTML = `
+        <svg class="score-circle-svg" viewBox="0 0 36 36">
+            <circle class="score-circle-bg" cx="18" cy="18" r="15" fill="${color1}" />
+            <!-- Statischer Highscore-Ring (Weiß, dünn) -->
+            <circle class="ring-highscore" cx="18" cy="18" r="15" fill="none" stroke="#ffffff" stroke-width="0.8" 
+                    stroke-dasharray="${totalCircumference}" stroke-dashoffset="${totalCircumference}" />
+            <!-- Live-Tracking-Ring (Grün leuchtend) -->
+            <circle class="ring-current ring-current-glow" cx="18" cy="18" r="15" fill="none" stroke="#00ff66" stroke-width="1.2" 
+                    stroke-dasharray="${totalCircumference}" stroke-dashoffset="${totalCircumference}" />
+        </svg>
+        <div class="score-circle-text" style="color: ${color2};">0</div>
+    `;
+
+    document.getElementById("scoreContainerDesktop").innerHTML = svgHTML;
+    document.getElementById("scoreContainerMobile").innerHTML = svgHTML;
+}
+
+// Berechnet die Ring-Abdeckungen (0 bis 26 Spieler) live im UI
+function updateScoreVisuals() {
+    const totalCircumference = 2 * Math.PI * 15;
+    const maxPlayers = 26;
+
+    // Schutzgrenzen einhalten (0 - 26)
+    const displayScore = Math.min(game.currentScore, maxPlayers);
+    const displayHighscore = Math.min(game.highscore, maxPlayers);
+
+    // Berechne Offsets für die Kreis-Bänder
+    const currentOffset = totalCircumference - (displayScore / maxPlayers) * totalCircumference;
+    const highscoreOffset = totalCircumference - (displayHighscore / maxPlayers) * totalCircumference;
+
+    // Aktualisiere alle Ringe im DOM (Desktop + Mobile)
+    document.querySelectorAll(".ring-current").forEach(el => el.style.strokeDashoffset = currentOffset);
+    document.querySelectorAll(".ring-highscore").forEach(el => el.style.strokeDashoffset = highscoreOffset);
+    
+    // Zahl im Kreis aktualisieren
+    document.querySelectorAll(".score-circle-text").forEach(el => el.innerText = game.currentScore);
+}
 
 const map = {
     ST:["ST","CF"], AM:["AM","CAM"], CM:["CM"], DM:["DM","CDM"], CB:["CB"], GK:["GK"],
@@ -1090,6 +1249,9 @@ document.getElementById("input").addEventListener("input", (e) => {
         p.guessed = true;
         e.target.value = "";
         
+        game.currentScore++;
+        updateScoreVisuals(); // Live-Update der Ringe im Header
+        
         const targetCircle = document.querySelector(`.circle[data-jersey="${p.jersey_number}"]`);
         if(targetCircle) {
             targetCircle.innerHTML = `<img src="./data/${game.team.folder}/players/${p.jersey_number}.png" alt=""><span></span>`;
@@ -1140,13 +1302,11 @@ function updateHistories(p){
     const hMobile = document.getElementById("historyMobile");
     if (hMobile) {
         hMobile.innerHTML = "";
-        // HIER GEÄNDERT: Array umdrehen, damit das neueste Bild ganz rechts generiert wird und den Rest nach links schiebt.
         [...game.history].reverse().forEach(x => {
             const d = document.createElement("div");
             d.className = "card";
             const clubClean = (x.club || "").trim();
             
-            // HIER GEÄNDERT: Wappen für das Overlap-Design in HTML eingebaut
             d.innerHTML = `
                 <img class="player-img" src="./data/${game.team.folder}/players/${x.jersey_number}.png" alt="">
                 <img class="mobile-club-badge" src="./data/${game.team.folder}/clubs/${clubClean}.png" onerror="this.style.display='none'" alt="">
@@ -1168,15 +1328,44 @@ function setupFinishButtons() {
 
 function endGame() {
     game.finished = true;
+    
+    // Berechne die prozentuale Leistung
+    const totalPlayers = 26; 
+    const percentage = Math.round((game.currentScore / totalPlayers) * 100);
+    
     const inputField = document.getElementById("input");
     if(inputField) {
-        inputField.disabled = true;
-        inputField.placeholder = "Game Over";
-        inputField.value = "";
+        inputField.disabled = false; // Kurz auf false, um Text reinzuschreiben
+        inputField.classList.add("game-over-output");
+        
+        // Text-Ausgabe generieren
+        inputField.value = `Ergebnis: ${game.currentScore}/${totalPlayers} Spieler erraten (${percentage}%)`;
+        
+        // Visuelles Highlight bei 100% (Grün leuchtend)
+        if (percentage === 100) {
+            inputField.classList.add("glow-green");
+        }
+        
+        inputField.disabled = true; // Wieder sperren
         inputField.blur();
     }
+    
     document.getElementById("btnFinishDesktop").style.display = "none";
     document.getElementById("btnFinishMobile").style.display = "none";
+    
+    // Cloud Firestore Highscore-Abgleich und Save-Prozess
+    const user = firebase.auth().currentUser;
+    if (user && game.currentScore > game.highscore) {
+        db.collection("users").doc(user.uid).collection("highscores").doc(teamKey).set({
+            score: game.currentScore,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true })
+        .then(() => {
+            console.log("Neuer Rekord erfolgreich in Cloud Firestore registriert!");
+        })
+        .catch(err => console.error("Datenbank-Fehler beim Sichern des Rekords:", err));
+    }
+
     if(game.teamDetails) {
         renderPitch(game.teamDetails);
     }
