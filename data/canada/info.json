@@ -11,10 +11,10 @@
       "first_name": "Dayne St.",
       "last_name": "Clair",
       "jersey_number": 1,
-      "birthdate": "",
+      "birthdate": "09.05.1997",
       "club": "Inter Miami CF",
       "position": "GK",
-      "height": "",
+      "height": "1,91m",
       "aliases": []
     },
     {
@@ -22,10 +22,10 @@
       "first_name": "Maxime",
       "last_name": "Crépeau",
       "jersey_number": 16,
-      "birthdate": "",
+      "birthdate": "11.05.1994",
       "club": "Orlando City SC",
       "position": "GK",
-      "height": "",
+      "height": "1,85m",
       "aliases": [
         "Crepeau"
       ]
@@ -35,10 +35,10 @@
       "first_name": "Owen",
       "last_name": "Goodman",
       "jersey_number": 18,
-      "birthdate": "",
+      "birthdate": "27.11.2003",
       "club": "Barnsley FC",
       "position": "GK",
-      "height": "",
+      "height": "1,93m",
       "aliases": []
     },
     {
@@ -46,10 +46,10 @@
       "first_name": "Moïse",
       "last_name": "Bombito",
       "jersey_number": 15,
-      "birthdate": "",
+      "birthdate": "30.03.2000",
       "club": "OGC Nice",
       "position": "CB",
-      "height": "",
+      "height": "1,90m",
       "aliases": []
     },
     {
@@ -57,10 +57,10 @@
       "first_name": "Alfie",
       "last_name": "Jones",
       "jersey_number": 3,
-      "birthdate": "",
+      "birthdate": "07.10.1997",
       "club": "Middlesbrough FC",
       "position": "CB",
-      "height": "",
+      "height": "1,91m",
       "aliases": []
     },
     {
@@ -68,10 +68,10 @@
       "first_name": "Derek",
       "last_name": "Cornelius",
       "jersey_number": 13,
-      "birthdate": "",
+      "birthdate": "25.11.1997",
       "club": "Olympique Marseille",
       "position": "CB",
-      "height": "",
+      "height": "1,86m",
       "aliases": []
     },
     {
@@ -79,10 +79,10 @@
       "first_name": "Joel",
       "last_name": "Waterman",
       "jersey_number": 5,
-      "birthdate": "",
+      "birthdate": "24.01.1996",
       "club": "Chicago Fire FC",
       "position": "CB",
-      "height": "",
+      "height": "1,85m",
       "aliases": []
     },
     {
@@ -90,10 +90,10 @@
       "first_name": "Luc De",
       "last_name": "Fougerolles",
       "jersey_number": 4,
-      "birthdate": "",
+      "birthdate": "12.10.2005",
       "club": "FCV Dender EH",
       "position": "CB",
-      "height": "",
+      "height": "1,83m",
       "aliases": []
     },
     {
@@ -101,10 +101,10 @@
       "first_name": "Alphonso",
       "last_name": "Davies",
       "jersey_number": 19,
-      "birthdate": "",
+      "birthdate": "02.11.2000",
       "club": "Bayern Munich",
       "position": "LB",
-      "height": "",
+      "height": "1,83m",
       "aliases": []
     },
     {
@@ -112,10 +112,10 @@
       "first_name": "Alistair",
       "last_name": "Johnston",
       "jersey_number": 2,
-      "birthdate": "",
+      "birthdate": "08.10.1998",
       "club": "Celtic FC",
       "position": "RB",
-      "height": "",
+      "height": "1,80m",
       "aliases": []
     },
     {
@@ -123,10 +123,10 @@
       "first_name": "Richie",
       "last_name": "Laryea",
       "jersey_number": 22,
-      "birthdate": "",
+      "birthdate": "07.01.1995",
       "club": "Toronto FC",
       "position": "RB",
-      "height": "",
+      "height": "1,75m",
       "aliases": []
     },
     {
@@ -134,10 +134,10 @@
       "first_name": "Niko",
       "last_name": "Sigur",
       "jersey_number": 23,
-      "birthdate": "",
+      "birthdate": "09.09.2003",
       "club": "HNK Hajduk Split",
       "position": "DM",
-      "height": "",
+      "height": "1,78m",
       "aliases": []
     },
     {
@@ -145,10 +145,10 @@
       "first_name": "Ismaël",
       "last_name": "Koné",
       "jersey_number": 8,
-      "birthdate": "",
+      "birthdate": "16.06.2002",
       "club": "US Sassuolo",
       "position": "CM",
-      "height": "",
+      "height": "1,88m",
       "aliases": [
         "Kone"
       ]
@@ -158,10 +158,10 @@
       "first_name": "Nathan-Dylan",
       "last_name": "Saliba",
       "jersey_number": 25,
-      "birthdate": "",
+      "birthdate": "07.02.2004",
       "club": "RSC Anderlecht",
       "position": "CM",
-      "height": "",
+      "height": "1,74m",
       "aliases": []
     },
     {
@@ -169,10 +169,10 @@
       "first_name": "Stephen",
       "last_name": "Eustaquio",
       "jersey_number": 7,
-      "birthdate": "",
+      "birthdate": "21.12.1996",
       "club": "Los Angeles FC",
       "position": "CM",
-      "height": "",
+      "height": "1,75m",
       "aliases": []
     },
     {
@@ -180,10 +180,10 @@
       "first_name": "Jonathan",
       "last_name": "Osorio",
       "jersey_number": 21,
-      "birthdate": "",
+      "birthdate": "12.06.1992",
       "club": "Toronto FC",
       "position": "CM",
-      "height": "",
+      "height": "1,75m",
       "aliases": []
     },
     {
@@ -191,10 +191,10 @@
       "first_name": "Mathieu",
       "last_name": "Choinière",
       "jersey_number": 6,
-      "birthdate": "",
+      "birthdate": "07.02.1999",
       "club": "Los Angeles FC",
       "position": "CM",
-      "height": "",
+      "height": "1,73m",
       "aliases": [
         "Choiniere"
       ]
@@ -204,10 +204,10 @@
       "first_name": "Ali",
       "last_name": "Ahmed",
       "jersey_number": 20,
-      "birthdate": "",
+      "birthdate": "10.10.2000",
       "club": "Norwich City",
       "position": "LW",
-      "height": "",
+      "height": "1,80m",
       "aliases": []
     },
     {
@@ -215,10 +215,10 @@
       "first_name": "Liam",
       "last_name": "Millar",
       "jersey_number": 11,
-      "birthdate": "",
+      "birthdate": "27.09.1999",
       "club": "Hull City",
       "position": "LW",
-      "height": "",
+      "height": "1,76m",
       "aliases": []
     },
     {
@@ -226,10 +226,21 @@
       "first_name": "Jacob",
       "last_name": "Shaffelburg",
       "jersey_number": 14,
-      "birthdate": "",
+      "birthdate": "26.11.1999",
       "club": "Los Angeles FC",
       "position": "LW",
-      "height": "",
+      "height": "1,81m",
+      "aliases": []
+    },
+    {
+      "nation": "Canada",
+      "first_name": "Jayden",
+      "last_name": "Nelson",
+      "jersey_number": 7,
+      "birthdate": "26.09.2002",
+      "club": "Austin FC",
+      "position": "LW",
+      "height": "1,70m",
       "aliases": []
     },
     {
@@ -237,10 +248,10 @@
       "first_name": "Tajon",
       "last_name": "Buchanan",
       "jersey_number": 17,
-      "birthdate": "",
+      "birthdate": "08.02.1999",
       "club": "Villarreal CF",
       "position": "RW",
-      "height": "",
+      "height": "1,83m",
       "aliases": []
     },
     {
@@ -248,10 +259,10 @@
       "first_name": "Jonathan",
       "last_name": "David",
       "jersey_number": 10,
-      "birthdate": "",
+      "birthdate": "14.01.2000",
       "club": "Juventus FC",
       "position": "ST",
-      "height": "",
+      "height": "1,75m",
       "aliases": []
     },
     {
@@ -259,10 +270,10 @@
       "first_name": "Promise",
       "last_name": "David",
       "jersey_number": 24,
-      "birthdate": "",
+      "birthdate": "03.07.2001",
       "club": "Union Saint-Gilloise",
       "position": "ST",
-      "height": "",
+      "height": "1,95m",
       "aliases": []
     },
     {
@@ -270,10 +281,10 @@
       "first_name": "Tani",
       "last_name": "Oluwaseyi",
       "jersey_number": 12,
-      "birthdate": "",
+      "birthdate": "15.05.2000",
       "club": "Villarreal CF",
       "position": "ST",
-      "height": "",
+      "height": "1,87m",
       "aliases": []
     },
     {
@@ -281,10 +292,10 @@
       "first_name": "Cyle",
       "last_name": "Larin",
       "jersey_number": 9,
-      "birthdate": "",
+      "birthdate": "17.04.1995",
       "club": "Southampton FC",
       "position": "ST",
-      "height": "",
+      "height": "1,88m",
       "aliases": []
     }
   ]
