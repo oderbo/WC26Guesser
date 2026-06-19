@@ -550,27 +550,25 @@ async function sendTradeRequest() {
 
     await batch.commit();
 
-    // --- NEU: PUSH VIA CORS-PROXY SENDEN ---
+	// --- NEU: PUSH VIA MAKE.COM WEBHOOK SENDEN ---
     try {
-        await fetch('https://corsproxy.io/?https://onesignal.com/api/v1/notifications', {
+        await fetch('https://hook.eu1.make.com/xj7pv7y60pcu1yaplx0xlkpsfdxq8343', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                // Dein REST API Key
-                'Authorization': 'Basic os_v2_app_f6phyzerzrcrnav4jkcdwpd6blxzxgdt7z4esfuzz3w4i7z74pak7o425xhetycdunhemuiu7lrt7jaqtit44ocluwnhvizesbxls6a'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                app_id: '2f9e7c64-91cc-4516-82bc-4a843b3c7e0a',
-                include_external_user_ids: [tradeTargetUser.uid],
-                headings: { 'en': 'Neues Tauschangebot! 🔥' },
-                contents: { 'en': `${myName} möchte ${tradeSelectedItems.length} Sticker mit dir tauschen.` },
-                // Korrekter Pfad zu deiner Vollversion
-                url: 'https://oderbo.github.io/WC26Guesser/market.html'
+                targetUid: tradeTargetUser.uid,
+                senderName: myName,
+                stickerCount: tradeSelectedItems.length
             })
         });
     } catch (e) {
-        console.error("Push-Fehler:", e);
+        console.error("Webhook-Fehler:", e);
     }
+
+    closeTradeModal();
+    // ... restlicher Code (btn.innerText = "Senden" etc.)
 
     closeTradeModal();
     btn.innerText = "Senden";
