@@ -864,6 +864,33 @@ function startUserSync(uid) {
             packTimerInterval = setInterval(() => checkAndGeneratePacks(uid), 60000);
         }
     });
+
+    // --- DETEKTOR FÜR EINGEHENDE PUSH-BENACHRICHTIGUNGEN ---
+    db.collection("trade_requests")
+        .where("receiver_uid", "==", uid)
+        .where("status", "==", "pending")
+        .onSnapshot(snap => {
+            snap.docChanges().forEach(change => {
+                if (change.type === "added") {
+                    const tradeData = change.doc.data();
+                    
+                    // Prüfen, ob das Dokument frisch erstellt wurde (nicht älter als 10 Sekunden)
+                    const createdAt = tradeData.created_at ? tradeData.created_at.toDate() : new Date();
+                    if (new Date() - createdAt < 10000) {
+                        console.log("Neues Tauschangebot detektiert von:", tradeData.sender_name);
+                        
+                        window.OneSignalDeferred = window.OneSignalDeferred || [];
+                        OneSignalDeferred.push(function(OneSignal) {
+                            // Feuert die Benachrichtigung nativ auf dem Handy ab
+                            OneSignal.Notifications.displaySelfNotification(
+                                "Neues Tauschangebot! 🔥",
+                                `${tradeData.sender_name} möchte Sticker mit dir tauschen.`
+                            );
+                        });
+                    }
+                }
+            });
+        });
 }
 
 function restoreUnassignedStickers(unassignedIds) {
