@@ -180,7 +180,7 @@ h1 { margin: 0; font-size: 24px; font-family: 'FWC2026', Arial, sans-serif; text
 }
 .trade-slot.claim-slot { cursor: default; }
 
-/* --- STICKER CSS (1:1 aus Album Engine) --- */
+/* --- STICKER CSS --- */
 .sticker-wrapper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.3); pointer-events: none; background-color: #ffffff !important; }
 .sticker-inner { position: absolute; top: 4.5cqw; left: 4.5cqw; right: 4.5cqw; bottom: 4.5cqw; background-color: var(--color-1, #c10e23); border: 0.6cqw solid var(--color-2, #046a38); outline: 0.6cqw solid var(--color-3, #f2a900); outline-offset: -0.1cqw; box-sizing: border-box; pointer-events: none; }
 .sticker-flag { position: absolute; top: 0; right: 0; width: 15cqw; height: 15cqw; border-radius: 50%; overflow: hidden; border: 1px solid #000000; box-sizing: border-box; z-index: 2; pointer-events: none;}
@@ -492,6 +492,9 @@ function loadMarketUsers() {
     const uid = firebase.auth().currentUser.uid;
     const grid = document.getElementById("market-content");
 
+    // SOFORTIGE LADE-ANZEIGE (Verhindert weitere Klicks)
+    grid.innerHTML = '<div style="color:white; grid-column: 1 / -1; text-align: center; font-size: 18px;">Aktualisiere Markt...</div>';
+
     const usersPromise = db.collection("users").get(); 
     const marketPromise = db.collection("market").where("status", "==", "available").get();
     const tradesPromise = db.collection("trade_requests").get();
@@ -501,6 +504,10 @@ function loadMarketUsers() {
         let myIncomingStickers = new Set();
         let expiredTrades = [];
 
+        // TRACKING: Kontingent und offene Deals
+        let myPromisedCount = 0;
+        let hasPendingTradeWith = new Set();
+
         tradesSnap.forEach(doc => {
             const trade = doc.data();
             const expiresAt = trade.expires_at ? trade.expires_at.toDate() : new Date(0);
@@ -509,9 +516,21 @@ function loadMarketUsers() {
             } else {
                 if (trade.sender_uid === uid) {
                     (trade.sticker_ids_from_receiver || []).forEach(id => myIncomingStickers.add(id));
+                    
+                    if (trade.status === 'pending') {
+                        hasPendingTradeWith.add(trade.receiver_uid);
+                        myPromisedCount += (trade.sticker_ids_from_receiver || []).length;
+                    } else if (trade.status === 'needs_sender_confirmation') {
+                        hasPendingTradeWith.add(trade.receiver_uid);
+                        myPromisedCount += (trade.sticker_ids_from_sender || []).length;
+                    }
                 }
                 if (trade.receiver_uid === uid) {
                     (trade.sticker_ids_from_sender || []).forEach(id => myIncomingStickers.add(id));
+                    
+                    if (trade.status === 'pending' || trade.status === 'needs_sender_confirmation') {
+                        hasPendingTradeWith.add(trade.sender_uid);
+                    }
                 }
             }
         });
@@ -531,6 +550,9 @@ function loadMarketUsers() {
             if (!marketInventory[data.owner_uid]) marketInventory[data.owner_uid] = [];
             marketInventory[data.owner_uid].push({ docId: doc.id, stickerId: data.sticker_id });
         });
+
+        // BERECHNUNG: Freie Sticker abzüglich der bereits in offenen Deals versprochenen
+        let myUncommittedCount = Math.max(0, myMarketStickers.length - myPromisedCount);
 
         grid.innerHTML = ''; 
 
@@ -572,19 +594,30 @@ function loadMarketUsers() {
 
             let uniqueWhatTheyNeed = [...new Set(myMarketStickers)].filter(id => !theirOwned.has(id));
 
+            let matchCount = Math.min(uniqueWhatTheyNeed.length, myUncommittedCount);
+
             const card = document.createElement('div');
             card.className = 'user-card';
             
-            if (whatINeed.length === 0 || uniqueWhatTheyNeed.length === 0) {
+            if (hasPendingTradeWith.has(otherUid)) {
                 card.style.opacity = "0.6"; 
-                card.onclick = () => alert(uniqueWhatTheyNeed.length === 0 ? "Kein Tausch-Match (Du hast nichts, was er braucht)." : "Du brauchst nichts von diesem Spieler.");
+                card.onclick = () => alert("Ihr habt bereits eine offene Tauschanfrage. Bitte schließe diese erst ab!");
+            } else if (whatINeed.length === 0 || uniqueWhatTheyNeed.length === 0 || matchCount === 0) {
+                card.style.opacity = "0.6"; 
+                card.onclick = () => {
+                    if (matchCount === 0 && uniqueWhatTheyNeed.length > 0) alert("Dein Tausch-Kontingent ist aufgebraucht! Du hast all deine freien Sticker bereits in anderen Anfragen versprochen. Warte auf Antworten.");
+                    else if (uniqueWhatTheyNeed.length === 0) alert("Kein Tausch-Match (Du hast nichts, was er braucht).");
+                    else alert("Du brauchst nichts von diesem Spieler.");
+                };
             } else {
-                card.onclick = () => openTradeModal(otherUid, displayName, uniqueWhatTheyNeed.length, whatINeed);
+                card.onclick = () => openTradeModal(otherUid, displayName, Math.min(whatINeed.length, matchCount), whatINeed);
             }
             
+            let displayMatchCount = hasPendingTradeWith.has(otherUid) ? 0 : Math.min(whatINeed.length, matchCount);
+
             card.innerHTML = `
                 <div class="info-badge" onclick="event.stopPropagation(); openProgressModal('${otherUid}')">i</div>
-                <div class="match-badge">${whatINeed.length}</div>
+                ${displayMatchCount > 0 ? `<div class="match-badge">${displayMatchCount}</div>` : ''}
                 <div class="user-icon">${displayName.charAt(0).toUpperCase()}</div>
                 <div class="user-name">${displayName}</div>
             `;
@@ -741,26 +774,26 @@ async function sendTradeRequest() {
 
     await batch.commit();
 
-    try {
-        await fetch('https://hook.eu1.make.com/xj7pv7y60pcu1yaplx0xlkpsfdxq8343', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                targetUid: tradeTargetUser.uid,
-                senderName: myName,
-                stickerCount: tradeSelectedItems.length
-            })
-        });
-    } catch (e) {
-        console.error("Webhook-Fehler:", e);
-    }
-
+    // 1. SOFORT Modal schließen und Button zurücksetzen
     closeTradeModal();
     btn.innerText = "Senden";
     btn.disabled = false;
+    
+    // 2. SOFORT den Markt neu laden
     loadMarketUsers(); 
+
+    // 3. Webhook im Hintergrund abfeuern (ohne 'await')
+    fetch('https://hook.eu1.make.com/xj7pv7y60pcu1yaplx0xlkpsfdxq8343', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            targetUid: tradeTargetUser.uid,
+            senderName: myName,
+            stickerCount: tradeSelectedItems.length
+        })
+    }).catch(e => console.error("Webhook-Fehler:", e));
 }
 
 function openOffersListModal() {
