@@ -46,21 +46,8 @@ body {
     align-items: center; width: 100%; position: relative; 
 }
 
-.header-container { 
-    width: 100%; 
-    max-width: 1400px; 
-    position: relative; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    
-    /* NEU: Der magische Apple-Fix */
-    margin-top: calc(env(safe-area-inset-top, 10px) + 10px); 
-    
-    margin-bottom: 0px; 
-    height: 50px; 
-    flex-shrink: 0; 
-}
+/* --- OBERE LEISTE --- */
+.header-container { width: 100%; max-width: 1400px; position: relative; display: flex; justify-content: center; align-items: center; margin-top: -20px; margin-bottom: 0px; height: 50px; flex-shrink: 0; }
 
 /* TITEL NUTZT WEITERHIN FWC2026 */
 h1 { margin: 0; font-size: 22px; font-family: 'FWC2026', Arial, sans-serif; text-transform: uppercase; text-shadow: 0 1px 3px rgba(0,0,0,0.4); letter-spacing: 1px; text-align: center; }
