@@ -427,7 +427,7 @@ body {
     width: 100%; height: 100%; object-fit: cover; display: block;
 }
 
-/* STADIEN & TROPHY/LOGO HALF-FRAMES (KORRIGIERT: Links/Rechts getauscht) */
+/* STADIEN & TROPHY/LOGO HALF-FRAMES */
 .container-stadium-left .special-sticker-inner { right: 0; }
 .container-stadium-right .special-sticker-inner { left: 0; }
 .container-trophy-top .special-sticker-inner { left: 0; }
@@ -453,10 +453,10 @@ body {
     background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%) !important;
 }
 
-/* SPECIAL FILL (Kein sichtbarer Innenrahmen, wird zu einer Fläche) */
+/* SPECIAL FILL */
 .container-special-fill .special-sticker-inner {
     background-color: transparent;
-    top: 2px; bottom: 2px; left: 2px; right: 2xp;
+    top: 2px; bottom: 2px; left: 2px; right: 2px;
 }
 
 /* --- NEUE ELEMENTE FÜR SONDERSTICKER (FLAGGEN, NAMEN, ICONS) --- */
@@ -620,7 +620,6 @@ body {
 .btn-market-round { border: 2px solid #ffbb04; }
 .btn-send-album-round { border: 2px solid #28a745; }
 </style>
-<!-- OneSignal SDK -->
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -803,6 +802,7 @@ firebase.auth().onAuthStateChanged((user) => {
         
         if (albumNavBtn) albumNavBtn.disabled = false;
         
+        // SICHERHEITS-START DER SYNCHRONISATION
         startUserSync(user.uid);
     } else {
         led.classList.remove('online'); 
@@ -822,30 +822,48 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 });
 
+// =========================================================================
+// SICHERE PROFIL-SYNCHRONISATION & ERSTELLUNG (DER FIX)
+// =========================================================================
 function startUserSync(uid) {
-    db.collection("users").doc(uid).onSnapshot((doc) => {
-        if (!doc.exists) {
-            // Aktuellen Firebase-User abrufen, um an die Anmeldedaten zu kommen
+    const userRef = db.collection("users").doc(uid);
+
+    // 1. ECHTER SERVER-CHECK (get statt onSnapshot), um Cache-Lügen zu vermeiden!
+    userRef.get().then((docSnapshot) => {
+        if (!docSnapshot.exists) {
+            // Wirklich ein neuer User!
             const authUser = firebase.auth().currentUser;
             let generatedName = "Spieler";
             
-            // Nimmt den Teil vor dem @-Zeichen der E-Mail als Standard-Namen
             if (authUser && authUser.email) {
                 generatedName = authUser.email.split('@')[0];
             }
 
-            db.collection("users").doc(uid).set({
-                username: generatedName, // <-- HIER WIRD DER NAME JETZT GESPEICHERT!
+            userRef.set({
+                username: generatedName,
                 packs_available: 7,
                 last_pack_claimed: firebase.firestore.FieldValue.serverTimestamp(),
                 album: {},
                 stapel: [],
                 unassigned_stickers: [] 
             }).then(() => {
-                console.log("Neues Profil angelegt.");
+                console.log("Neues Profil sicher angelegt.");
+                startListener(uid); // Listener erst nach sicherer Erstellung starten
             }).catch(err => console.error("Fehler beim Erstellen des Profils:", err));
-            return;
+        } else {
+            // User existiert bereits, einfach Listener starten (KEIN set!)
+            startListener(uid);
         }
+    }).catch(err => {
+        console.error("Fehler beim Prüfen des Profils:", err);
+        startListener(uid); // Im Zweifel lieber nur zuhören, um nichts zu überschreiben
+    });
+}
+
+// 2. GETRENNTER LISTENER (Übernimmt die restliche Arbeit)
+function startListener(uid) {
+    db.collection("users").doc(uid).onSnapshot((doc) => {
+        if (!doc.exists) return; // Wenn das Dokument fehlt, NICHTS tun! Keine leeren Alben mehr!
         
         currentUserData = doc.data();
         const packs = currentUserData.packs_available || 0;
@@ -865,6 +883,7 @@ function startUserSync(uid) {
         }
     });
 }
+// =========================================================================
 
 function restoreUnassignedStickers(unassignedIds) {
     if (!globalStickerDatabase) {
@@ -1135,7 +1154,6 @@ function renderDrawnStickersGrid() {
             } else if (sticker.type === 'golden_boot' || (sticker.id && sticker.id.startsWith('GBO'))) {
                 finalPath = "photos/golden_boot/" + pureFileName;
             } else if (sticker.type && sticker.type.startsWith('special')) {
-                // BUGFIX: Keine automatische Umbenennung mehr. Wir nehmen den Dateinamen exakt aus der JSON.
                 finalPath = "photos/special/" + pureFileName;
             } else if (sticker.type && sticker.type.startsWith('stadium')) {
                 finalPath = "photos/stadiums/" + pureFileName;
