@@ -120,12 +120,19 @@ h1 { margin: 0; font-size: 22px; font-family: 'FWC2026', Arial, sans-serif; text
 .paper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; transform-style: preserve-3d; transform-origin: left center; transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); will-change: transform; }
 .paper.flipped { transform: rotateY(-180deg); }
 
+/* 1. preserve-3d wurde entfernt, um die Ebenen für Safari flach zu rendern */
 .front, .back { 
     position: absolute; width: 100%; height: 100%; top: 0; left: 0; 
     -webkit-backface-visibility: hidden; backface-visibility: hidden; 
     background-color: #f4f1ea; overflow: hidden; container-type: inline-size; 
-    -webkit-transform-style: preserve-3d; transform-style: preserve-3d;
 }
+
+/* 2. NEU: Zwingt auch jedes noch so kleine Unter-Element und Pseudo-Element, die Rückseite zu verstecken */
+.front *, .back *, .front *::before, .back *::before, .front *::after, .back *::after {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
 .front { border-left: 1px solid rgba(0,0,0,0.25); transform: rotateY(0deg) translateZ(1px); -webkit-transform: rotateY(0deg) translateZ(1px); z-index: 2; }
 .back { border-right: 1px solid rgba(0,0,0,0.25); transform: rotateY(180deg) translateZ(1px); -webkit-transform: rotateY(180deg) translateZ(1px); z-index: 1; }
 .cover-img { width: 100%; height: 100%; object-fit: cover; border-radius: 0 8px 8px 0; }
