@@ -168,6 +168,11 @@ h1 { margin: 0; font-size: 22px; font-family: 'FWC2026', Arial, sans-serif; text
     background-color: var(--page-bg, transparent);
     --col-w: 21.5cqw; 
     --col-h: calc(21.5cqw * 1.38);
+    
+    /* APPLE SAFARI FIX: Flacht die Seite vor der 3D-Drehung ab und stoppt das Durchbluten */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .dark-page {
@@ -189,6 +194,10 @@ h1 { margin: 0; font-size: 22px; font-family: 'FWC2026', Arial, sans-serif; text
     background-color: #000000;
     border-radius: 5cqw;
     z-index: -1;
+    
+    /* APPLE SAFARI FIX: Stoppt das Durchbluten des dunklen Hintergrunds */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 /* ÜBERSCHRIFTEN NUTZEN FWC2026 */
