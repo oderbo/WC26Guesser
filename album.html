@@ -41,11 +41,7 @@ html, body { overflow: hidden; height: 100dvh; text-size-adjust: none; -webkit-t
 
 /* STANDARD-SCHRIFT FÜR DIE GESAMTE APP: Arial */
 body { 
-    margin: 0; 
-    padding: 10px 6px; 
-    /* APPLE FIX: Schiebt das gesamte Layout unter die Notch / Dynamic Island */
-    padding-top: calc(env(safe-area-inset-top, 0px) + 10px); 
-    font-family: Arial, sans-serif; 
+    margin: 0; padding: 10px 6px; font-family: Arial, sans-serif; 
     color: white; background-color: #3f57f5; display: flex; flex-direction: column; 
     align-items: center; width: 100%; position: relative; 
 }
@@ -57,7 +53,10 @@ body {
     display: flex; 
     justify-content: center; 
     align-items: center; 
+    
+    /* NEU: Der magische Apple-Fix */
     margin-top: calc(env(safe-area-inset-top, 10px) + 10px); 
+    
     margin-bottom: 0px; 
     height: 50px; 
     flex-shrink: 0; 
@@ -169,11 +168,6 @@ h1 { margin: 0; font-size: 22px; font-family: 'FWC2026', Arial, sans-serif; text
     background-color: var(--page-bg, transparent);
     --col-w: 21.5cqw; 
     --col-h: calc(21.5cqw * 1.38);
-    
-    /* APPLE SAFARI FIX: Flacht die Seite vor der 3D-Drehung ab und stoppt das Durchbluten */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transform: translateZ(0);
 }
 
 .dark-page {
@@ -195,10 +189,6 @@ h1 { margin: 0; font-size: 22px; font-family: 'FWC2026', Arial, sans-serif; text
     background-color: #000000;
     border-radius: 5cqw;
     z-index: -1;
-    
-    /* APPLE SAFARI FIX: Stoppt das Durchbluten des dunklen Hintergrunds */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
 }
 
 /* ÜBERSCHRIFTEN NUTZEN FWC2026 */
@@ -1307,14 +1297,6 @@ function turnToSpread(targetSpread, e = null) {
     
     book.classList.remove('zoomed-left', 'zoomed-right');
     
-    // NEU: Ist es ein Sprung über mehr als eine Seite?
-    const isJump = Math.abs(currentPageIndex - targetSpread) > 1;
-
-    // NEU: 3D-Animation kurz abschalten, um den iPhone RAM beim Überspringen zu schonen
-    if (isJump) {
-        papers.forEach(paper => paper.style.transition = 'none');
-    }
-    
     for(let i=0; i<papers.length; i++) {
         if (i < targetSpread) {
             papers[i].classList.add('flipped');
@@ -1324,16 +1306,8 @@ function turnToSpread(targetSpread, e = null) {
             papers[i].style.zIndex = maxPages - i;
         }
     }
-    
     currentPageIndex = targetSpread;
     updateNavArrows();
-
-    // NEU: Nach dem Sprung die Transition (Animation) wieder anschalten
-    if (isJump) {
-        setTimeout(() => {
-            papers.forEach(paper => paper.style.transition = '');
-        }, 50); 
-    }
 }
 
 /* =========================================================================
