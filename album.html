@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Sticker Album</title>
@@ -449,7 +450,7 @@ h1 { margin: 0; font-size: 22px; font-family: 'FWC2026', Arial, sans-serif; text
 <body>
 
 <div class="header-container">
-    <div onclick="window.location.href='index.html'" class="btn-back" style="cursor: pointer;">&lt;</div>
+    <div onclick="window.location.replace('index.html')" class="btn-back" style="cursor: pointer;">&lt;</div>
     <h1>Sticker Album</h1>
 </div>
 
@@ -457,7 +458,7 @@ h1 { margin: 0; font-size: 22px; font-family: 'FWC2026', Arial, sans-serif; text
     <span style="font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; color: #111;">INDEX</span>
 </button>
 
-<button class="action-btn-round btn-market-round" onclick="window.location.href='market.html'" title="Zum Markt">
+<button class="action-btn-round btn-market-round" onclick="window.location.replace('market.html')" title="Zum Markt">
     <img src="assets/market_icon.png" alt="Market">
     <div id="album-badge-offers" class="market-badge market-badge-red" style="display:none;">0</div>
     <div id="album-badge-claims" class="market-badge market-badge-green" style="display:none;">0</div>
@@ -1555,7 +1556,7 @@ firebase.auth().onAuthStateChanged((user) => {
               console.error("Fehler beim Abrufen der Trade-Anfragen:", error);
           });
     } else {
-        window.location.href = 'index.html';
+        window.location.replace('index.html');
     }
 });
 </script>

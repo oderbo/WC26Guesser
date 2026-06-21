@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<link rel="manifest" href="manifest.json">
 <title>WC26 Guesser</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -651,7 +652,7 @@ body {
         </div>
     </button>
     
-    <button id="navAlbumBtn" class="image-btn btn-album" onclick="window.location.href='album.html'" disabled></button>
+    <button id="navAlbumBtn" class="image-btn btn-album" onclick="window.location.replace('album.html')" disabled></button>
 </div>
 
 <div class="booster-zone" id="boosterZone">
@@ -1449,11 +1450,11 @@ function startRandom() {
         .then(data => {
             const keys = Object.keys(data.teams);
             const random = keys[Math.floor(Math.random() * keys.length)];
-            window.location.href = `game.html?team=${random}`;
+            window.location.replace(`game.html?team=${random}`);
         });
 }
-function openSelect() { window.location.href = "select.html"; }
-function openRandomPlayer() { window.location.href = "game_random_player.html"; }
+function openSelect() { window.location.replace("select.html"); }
+function openRandomPlayer() { window.location.replace("game_random_player.html"); }
 function toggleTop10(event) { event.stopPropagation(); const badge = document.getElementById("top10Badge"); const isActive = badge.classList.toggle("active"); localStorage.setItem("random_player_top10", isActive); }
 </script>
 </body>

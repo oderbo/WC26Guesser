@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>WC26 Guesser</title>
@@ -283,7 +284,7 @@ h1 {
 <body>
 
 <div class="header-container">
-    <a href="index.html" class="btn-back">&lt;</a>
+    <div onclick="window.location.replace('index.html')" class="btn-back" style="cursor: pointer;">&lt;</div>
     <h1>Pick a Nation</h1>
 </div>
 
@@ -404,11 +405,11 @@ function loadTeamsMenu() {
                             badgeDiv.innerText = score; 
                         }
                         
-                        badgeDiv.style.display = "flex"; 
+                        badgeDiv.style.display = "flex";
                     }
                 }
 
-                btn.onclick = () => { window.location.href = `game.html?team=${teamKey}`; };
+                btn.onclick = () => { window.location.replace(`game.html?team=${teamKey}`); };
                 teamsGrid.appendChild(btn);
             });
 

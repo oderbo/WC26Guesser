@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
 <title>WC26 Guesser</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -456,14 +457,14 @@ input:disabled {
     <div class="side-content center id-desktop-left">
         <div class="score-box" id="scoreDesktop">0</div>
         <div style="margin-top:auto; width:100%;">
-            <a href="index.html" class="btn-stop-global" style="background:#00a2ff !important; box-shadow:none; display:block; text-align:center; margin-bottom:10px;">Hauptmenü</a>
+            <div onclick="window.location.replace('index.html')" class="btn-stop-global" style="background:#00a2ff !important; box-shadow:none; display:block; text-align:center; margin-bottom:10px; cursor: pointer;">Hauptmenü</div>
         </div>
     </div>
 
     <!-- Mobile Header -->
     <div class="header-mobile-wrap">
         <div class="score-box" id="scoreMobile">0</div>
-        <a href="index.html" class="btn-stop-global">STOP</a>
+        <div onclick="window.location.replace('index.html')" class="btn-stop-global" style="cursor: pointer;">STOP</div>
         <div id="historyMobile"></div>
     </div>
 
@@ -472,7 +473,7 @@ input:disabled {
         
         <!-- Perfekt zentrierter STOP-Button oben auf Desktop -->
         <div class="stop-banner-desktop">
-            <a href="index.html" class="btn-stop-global">STOP</a>
+            <div onclick="window.location.replace('index.html')" class="btn-stop-global" style="cursor: pointer;">STOP</div>
         </div>
 
         <div class="pitch" id="pitch">

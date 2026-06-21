@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Market</title>
@@ -245,7 +246,7 @@ h1 { margin: 0; font-size: 24px; font-family: 'FWC2026', Arial, sans-serif; text
 <body>
 
 <div class="header-container">
-    <div onclick="window.location.href='album.html'" class="btn-back" style="cursor: pointer;">&lt;</div>
+    <div onclick="window.location.replace('album.html')" class="btn-back" style="cursor: pointer;">&lt;</div>
     <h1>Marktplatz</h1>
 </div>
 
@@ -451,7 +452,7 @@ function initMarketAuth() {
             });
 
         } else {
-            window.location.href = 'index.html';
+            window.location.replace('index.html');
         }
     });
 }
