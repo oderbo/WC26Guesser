@@ -124,28 +124,43 @@ h1 { margin: 0; font-size: 24px; font-family: 'FWC2026', Arial, sans-serif; text
 }
 
 /* --- FORTSCHRITT MODAL --- */
-#progressModal { z-index: 3000; }
-.progress-name { color: white; font-size: 18px; font-weight: bold; margin-bottom: 25px; text-align: center; font-family: Arial, sans-serif; }
+#progressModal { 
+    z-index: 3000; 
+    background-color: #ffffff;
+}
+
+#progressModalTitle {
+    color: #000000;
+    text-shadow: none;
+}
 
 .main-progress-wrapper {
     position: relative; width: 140px; height: 140px; margin: 0 auto;
-    border-radius: 50%; background: #222; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    border-radius: 50%; 
+    background: transparent; 
+    box-shadow: none; 
+    flex-shrink: 0;
 }
-.ring-track { position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,0.1); }
+
+.ring-track { 
+    position: absolute; inset: 0; border-radius: 50%; 
+    background: rgba(0,0,0,0.1); 
+}
+
 .ring-fill {
     position: absolute; inset: 0; border-radius: 50%;
-    background: repeating-conic-gradient(from 0deg, #00cc44 0deg 10deg, #33ff77 10deg 20deg, #009933 20deg 30deg);
+    background: conic-gradient(from 0deg, #00cc44 0%, #88ffaa 25%, #009933 50%, #88ffaa 75%, #00cc44 100%);
     mask: conic-gradient(#fff var(--p, 0%), transparent var(--p, 0%));
     -webkit-mask: conic-gradient(#fff var(--p, 0%), transparent var(--p, 0%));
 }
+
 .ring-inner {
     position: absolute; inset: 6px; border-radius: 50%; background: #ffffff;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); overflow: hidden;
+    box-shadow: none; overflow: hidden;
 }
 .main-inner { flex-direction: column; }
 .main-progress-text { font-size: 22px; font-weight: bold; color: #111; font-family: Arial, sans-serif; }
-.main-progress-label { font-size: 10px; color: #666; text-transform: uppercase; font-weight: bold; margin-top: 2px; }
 
 .progress-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 15px;
@@ -153,11 +168,12 @@ h1 { margin: 0; font-size: 24px; font-family: 'FWC2026', Arial, sans-serif; text
 }
 .dot-wrapper {
     position: relative; width: 50px; height: 50px; border-radius: 50%;
-    background: #222; box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    background: transparent; box-shadow: none; flex-shrink: 0;
 }
 .dot-wrapper .ring-inner { inset: 4px; padding: 0px; }
 .dot-content-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .dot-content-text { font-weight: bold; font-size: 24px; color: #111; font-family: 'FWC2026', Arial, sans-serif; }
+
 
 /* --- ANGEBOTE LISTE MODAL --- */
 .offer-list-card {
@@ -246,17 +262,14 @@ h1 { margin: 0; font-size: 24px; font-family: 'FWC2026', Arial, sans-serif; text
 <div id="progressModal" class="modal-overlay">
     <div class="modal-header" style="justify-content: center; position: relative;">
         <button class="btn-action btn-close" style="position: absolute; left: 0;" onclick="closeProgressModal()">Zurück</button>
-        <h2 class="modal-title" style="margin: 0;">FWC2026</h2>
+        <h2 class="modal-title" id="progressModalTitle" style="margin: 0;"></h2>
     </div>
     
-    <div class="progress-name" id="progressUsername">Spieler Name</div>
-
     <div class="main-progress-wrapper">
         <div class="ring-track"></div>
         <div class="ring-fill" id="mainProgressFill" style="--p: 0%;"></div>
         <div class="ring-inner main-inner">
             <span class="main-progress-text" id="mainProgressText">0 / 0</span>
-            <span class="main-progress-label">Gesammelt</span>
         </div>
     </div>
 
@@ -633,7 +646,8 @@ function openProgressModal(targetUid) {
     let userData = targetUid === firebase.auth().currentUser.uid ? currentUserData : marketUsersData[targetUid];
     let displayName = targetUid === firebase.auth().currentUser.uid ? (userData.username || "Ich") + " (Du)" : userData.name;
     
-    document.getElementById("progressUsername").innerText = displayName;
+    // Die Überschrift im Progress-Modal auf den Spielernamen setzen
+    document.getElementById("progressModalTitle").innerText = displayName;
     
     let album = userData.album || {};
     let pastedCount = 0;
@@ -663,7 +677,6 @@ function openProgressModal(targetUid) {
         
         let innerContent = '';
         
-        // HIER: Das perfekte Mapping aus deiner Index-Seite der album.html!
         if (sec.prefix === 'SPC') {
             innerContent = `<span class="dot-content-text">S</span>`;
         } else if (sec.prefix === 'STD') {
@@ -774,15 +787,12 @@ async function sendTradeRequest() {
 
     await batch.commit();
 
-    // 1. SOFORT Modal schließen und Button zurücksetzen
     closeTradeModal();
     btn.innerText = "Senden";
     btn.disabled = false;
     
-    // 2. SOFORT den Markt neu laden
     loadMarketUsers(); 
 
-    // 3. Webhook im Hintergrund abfeuern (ohne 'await')
     fetch('https://hook.eu1.make.com/xj7pv7y60pcu1yaplx0xlkpsfdxq8343', {
         method: 'POST',
         headers: {
