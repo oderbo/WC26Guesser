@@ -926,11 +926,11 @@ function checkAndGeneratePacks(uid) {
         lastClaimed = currentUserData.last_pack_claimed.toDate();
     }
 
-    function getRecentBoundary(dateObj) {
+	function getRecentBoundary(dateObj) {
         let d = new Date(dateObj.getTime());
         d.setMinutes(0, 0, 0);
         let hours = d.getHours();
-        d.setHours(Math.floor(hours / 4) * 4);
+        d.setHours(Math.floor(hours / 3) * 3); // Hier auf 3 geändert
         return d.getTime();
     }
 
@@ -938,10 +938,10 @@ function checkAndGeneratePacks(uid) {
     const currentBoundary = getRecentBoundary(now);
     
     const diffMs = currentBoundary - lastBoundary;
-    const fourHoursMs = 4 * 60 * 60 * 1000;
+    const threeHoursMs = 3 * 60 * 60 * 1000; // Hier auf 3 geändert
     
-    if (diffMs >= fourHoursMs) {
-        const earnedPacks = Math.floor(diffMs / fourHoursMs);
+    if (diffMs >= threeHoursMs) {
+        const earnedPacks = Math.floor(diffMs / threeHoursMs); // Hier auf 3 geändert
         let newPackTotal = (currentUserData.packs_available || 0) + earnedPacks;
         
         if (newPackTotal > 100) newPackTotal = 100;
