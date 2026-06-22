@@ -568,8 +568,14 @@ function createStickerHTML(sticker) {
             }
         }
         let posClassStr = sticker.posClass ? sticker.posClass.replace('pos-', '') : "mf";
-        const c1 = sticker.color_1 || '#c10e23'; const textContrast = getContrastColors(c1);
-        inlineStyle = `--color-1: ${c1}; --color-2: ${sticker.color_2 || '#046a38'}; --color-3: ${sticker.color_3 || '#f2a900'}; --dynamic-text: ${textContrast.text}; --dynamic-stroke: ${textContrast.stroke};`;
+        
+        // Farbberechnungen inklusive Kontrast für den Info-Box Hintergrund (color_2)
+        const c1 = sticker.color_1 || '#c10e23'; 
+        const textContrast = getContrastColors(c1);
+        const c2 = sticker.color_2 || '#046a38'; 
+        const nameContrast = getContrastColors(c2); 
+
+        inlineStyle = `--color-1: ${c1}; --color-2: ${c2}; --color-3: ${sticker.color_3 || '#f2a900'}; --dynamic-text: ${textContrast.text}; --dynamic-stroke: ${textContrast.stroke}; --dynamic-name-text: ${nameContrast.text};`;
         
         innerHTML = `
             <div class="sticker-inner">
@@ -577,7 +583,9 @@ function createStickerHTML(sticker) {
                 <div class="bg-svg-2"></div><div class="bg-svg-6"></div>
                 <div class="player-image-container"><img src="${cleanPath(sticker.image)}" onerror="this.src='assets/Icon.png'"></div>
                 <div class="lower-elements-wrapper">
-                    <div class="sticker-info-box"><div class="player-name">${fullName}</div></div>
+                    <div class="sticker-info-box">
+                        <div class="player-name" style="color: var(--dynamic-name-text); text-shadow: ${nameContrast.text === '#000000' ? 'none' : '0.3cqw 0.3cqw 0.5cqw rgba(0,0,0,0.5)'};">${fullName}</div>
+                    </div>
                     <div class="sticker-meta-container">
                         <div class="meta-box meta-box-left">${sticker.jersey_number || '-'}</div>
                         <div class="meta-box meta-box-center">${(sticker.birthdate || "") + ageStr}</div>
@@ -1007,14 +1015,11 @@ function buildGenericGrid(bp, rotateAll = false) {
 
 function buildPageHTML(bp, isLeftPage) {
     let wrapperStyle = "";
-    if (bp.type === 'team') {
-        let textColor = getPageTextColor(bp.color_2);
-        wrapperStyle = `--page-bg: ${bp.color_2}; --slot-color: ${bp.color_1}; --text-col: ${textColor};`;
-    }
 
 	if (bp.type === 'team') {
+        let groupTextColor = getPageTextColor(bp.color_3 || '#f2a900');
         // color_3 (--bg-deco) wird für die Zahlen genutzt, overflow: hidden schneidet alles ab, was über die Seite ragt
-        let wrapperStyle = `--page-bg: ${bp.color_2}; --slot-color: ${bp.color_1}; --text-col: ${getPageTextColor(bp.color_2)}; --bg-deco: ${bp.color_3 || '#f2a900'}; position: relative; overflow: hidden;`;
+        let wrapperStyle = `--page-bg: ${bp.color_2}; --slot-color: ${bp.color_1}; --text-col: ${getPageTextColor(bp.color_2)}; --group-text-col: ${groupTextColor}; --bg-deco: ${bp.color_3 || '#f2a900'}; position: relative; overflow: hidden;`;
 
         if (isLeftPage) { 
             let nameStyle = 'font-size: 8cqw;';
@@ -1040,15 +1045,15 @@ function buildPageHTML(bp, isLeftPage) {
                         </div>
                         
                         <div style="position: absolute; left: calc(var(--col-h) + 1cqw); width: calc(47cqw - var(--col-h) - 1cqw); height: var(--col-w); bottom: 0; display: flex; align-items: center; justify-content: center;">
-                            <img src="${bp.flag}" style="width: 12cqw; height: 12cqw; object-fit: cover; border-radius: 50%; border: 2.5px solid var(--slot-color); box-shadow: 0 3px 6px rgba(0,0,0,0.3);" onerror="this.style.display='none'">
+                            <img src="${bp.flag}" style="width: 16cqw; height: 16cqw; object-fit: cover; border-radius: 50%; border: 1px solid var(--slot-color); box-shadow: 0 3px 6px rgba(0,0,0,0.3);" onerror="this.style.display='none'">
                         </div>
 
-                        <div style="position: absolute; left: 47cqw; width: var(--col-w); height: var(--col-w); bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                            <span style="font-size: 2.5cqw; font-weight: bold; color: var(--text-col); margin-bottom: 2px;">GROUP</span>
-                            <strong style="font-size: 10.5cqw; line-height: 1; color: var(--text-col);">${bp.group}</strong>
+                        <div style="position: absolute; left: 53cqw; width: var(--col-w); height: var(--col-w); bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <span style="font-size: 2.5cqw; font-weight: bold; color: var(--group-text-col); margin-bottom: 2px;">GROUP</span>
+                            <strong style="font-size: 10.5cqw; line-height: 1; color: var(--group-text-col);">${bp.group}</strong>
                         </div>
 
-                        <div style="position: absolute; right: 0; bottom: 0; width: var(--col-w); height: var(--col-h);">
+                        <div style="position: absolute; left: calc(3 * var(--col-w) + 6cqw); bottom: 0; width: var(--col-w); height: var(--col-h);">
                             ${buildSlotHTML(bp.countryCode + '002', bp.startAlbumNumber + 1)}
                         </div>
                     </div>
