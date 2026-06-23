@@ -103,10 +103,11 @@ h1 { margin: 0; font-size: 24px; font-family: 'FWC2026', Arial, sans-serif; text
     border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 5;
 }
 
-/* --- MODALS (ALLGEMEIN) --- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #222222;
-    z-index: 2000; display: none; flex-direction: column; align-items: center; padding: 20px 10px;
+    z-index: 2000; display: none; flex-direction: column; align-items: center; 
+    /* Padding oben berechnet nun den Notch-Abstand dynamisch mit ein: */
+    padding: calc(env(safe-area-inset-top, 20px) + 20px) 10px 20px 10px;
 }
 .modal-title { 
     font-size: 22px; color: white; margin: 0 0 15px 0; text-align: center; width: 100%; 
