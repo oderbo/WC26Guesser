@@ -707,15 +707,6 @@ body {
     </div>
 </div>
 
-<div class="login-modal-overlay" id="bachelorModal" style="z-index: 100000;">
-    <div class="login-modal-content" style="border: 3px solid #FFD700; background: rgba(255, 255, 255, 0.95); box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);">
-        <h2 style="color: #00cc44; font-size: 28px; margin-bottom: 10px;">🎉 Glückwunsch! 🎉</h2>
-        <p style="color: #111; font-size: 18px; margin-bottom: 5px;">Zum bestandenen Bachelor, Svenniboy!</p>
-        <p style="color: #3f57f5; font-size: 15px; margin-bottom: 25px;">Als Belohnung gibt's 10 fette Booster Packs aufs Haus!</p>
-        <button class="login-btn btn-primary" onclick="closeBachelorModal()" style="background: #FFD700; color: #111; font-size: 18px; width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">Packs einsacken!</button>
-    </div>
-</div>
-
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -878,12 +869,6 @@ function startListener(uid) {
         currentUserData = doc.data();
         const packs = currentUserData.packs_available || 0;
         document.getElementById("packCounterCircle").innerText = packs;
-
-        // --- NEU: BACHELOR BONUS CHECK ---
-        if (currentUserData.username === "Svenjamin" && !currentUserData.bachelor_reward_claimed) {
-            showBachelorReward(uid, packs);
-        }
-        // ---------------------------------
         
         updateBoosterZoneVisibility();
         
@@ -900,23 +885,6 @@ function startListener(uid) {
     });
 }
 // =========================================================================
-
-// --- NEU: BACHELOR FUNKTIONEN ---
-function showBachelorReward(uid, currentPacks) {
-    document.getElementById("bachelorModal").style.display = "flex";
-    
-    db.collection("users").doc(uid).update({
-        packs_available: currentPacks + 10,
-        bachelor_reward_claimed: true
-    }).then(() => {
-        console.log("Sven hat seine 10 Bachelor-Packs bekommen!");
-    }).catch(err => console.error("Fehler beim Bachelor-Bonus:", err));
-}
-
-function closeBachelorModal() {
-    document.getElementById("bachelorModal").style.display = "none";
-}
-// ---------------------------------
 
 function restoreUnassignedStickers(unassignedIds) {
     if (!globalStickerDatabase) {
