@@ -1124,7 +1124,7 @@ function buildPageHTML(bp, isLeftPage) {
 				<div style="position: absolute; top: calc(4% + 11cqw + 5%); left: 50%; transform: translateX(-50%);">
 					<div class="rotated-slot-wrapper">${buildSlotHTML('SPC001', '1', 'rotated-slot spc-top-slot')}</div>
 				</div>
-				<div style="position: absolute; top: calc(4% + 11cqw + 5% + var(--col-w)); left: 50%; transform: translateX(-50%);">
+				<div style="position: absolute; top: calc(4% + 11cqw + 5% + var(--col-w) - 1px); left: 50%; transform: translateX(-50%);">
 					<div class="rotated-slot-wrapper">${buildSlotHTML('SPC002', '2', 'rotated-slot spc-bottom-slot')}</div>
 				</div>
 
@@ -1141,7 +1141,7 @@ function buildPageHTML(bp, isLeftPage) {
 				<div style="position: absolute; bottom: calc(25px + 2% + var(--col-w) + 5%); right: 4cqw;">
 					<div class="rotated-slot-wrapper">${buildSlotHTML('SPC006', '6', 'rotated-slot spc-bottom-slot')}</div>
 				</div>
-				<div style="position: absolute; bottom: calc(25px + 2% + var(--col-w)*2 + 5%); right: 4cqw;">
+				<div style="position: absolute; bottom: calc(25px + 2% + var(--col-w)*2 + 5% - 1px); right: 4cqw;">
 					<div class="rotated-slot-wrapper">${buildSlotHTML('SPC005', '5', 'rotated-slot spc-top-slot')}</div>
 				</div>
 				
